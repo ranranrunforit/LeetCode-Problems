@@ -8,6 +8,7 @@ class Solution(object):
         :rtype: int
         """
         return (high +1)/2 -low/2
+
 # Add half the difference of the range.
 # Add the endpoints of the range if odd.
 # Subtract one if both endpoints are odd.
@@ -52,6 +53,7 @@ class Solution(object):
         :rtype: int
         """
         return bin(n).count('1')
+
 # Using bit operation to cancel a 1 in each round
 # Think of a number in binary n = XXXXXX1000, n - 1 is XXXXXX0111.
 # n & (n - 1) will be XXXXXX0000 which is just remove the last significant 1
@@ -101,6 +103,7 @@ class Solution(object):
             if nums[i] + nums[i+1] > nums[i+2]:
                 return nums[i] + nums[i+1] +nums[i+2]
         return 0
+
 class Solution(object):
     def largestPerimeter(self, nums):
         """
@@ -149,6 +152,7 @@ class Solution(object):
             if x == 0: return 0 
             if x < 0: ans *= -1
         return ans 
+
 # 1502. Can Make Arithmetic Progression From Sequence
 class Solution(object):
     def canMakeArithmeticProgression(self, arr):
@@ -186,6 +190,7 @@ class Solution(object):
             n = get_next(n)
 
         return n == 1
+
 # 1790. Check if One String Swap Can Make Strings Equal
 class Solution(object):
     def areAlmostEqual(self, s1, s2):
@@ -196,6 +201,7 @@ class Solution(object):
         """
         diff = [[x, y] for x, y in zip(s1, s2) if x != y]
         return not diff or len(diff) == 2 and diff[0][::-1] == diff[1]
+
 # Day 5 Function
 # 589. N-ary Tree Preorder Traversal
 """
@@ -239,6 +245,7 @@ class Solution(object):
             ret.append(node.val)
             q += [child for child in node.children[::-1] if child]
         return ret
+
 # 496. Next Greater Element I
 '''
 Complexity:
@@ -287,6 +294,7 @@ class Solution(object):
             if (x1 - x0) * (y - y1) != (x - x1) * (y1 - y0):
                 return False
         return True
+
 # Day 6 Array
 # 1588. Sum of All Odd Length Subarrays
 '''
@@ -460,6 +468,7 @@ class Solution(object):
             res += word1[i] + word2[i]
             
         return res + word1[i+1:] + word2[i+1:]
+
 # Python 3 only ! using zip
 class Solution:
     def mergeAlternately(self, word1: str, word2: str) -> str:
@@ -519,6 +528,7 @@ class Solution(object):
         for cs in s: c ^= ord(cs) #ord is ASCII value
         for ct in t: c ^= ord(ct)
         return chr(c) #chr = convert ASCII into character
+
 # Day 9 String
 # 709. To Lower Case
 '''
@@ -574,6 +584,16 @@ class Solution(object):
         words = [[m[c] for c in w] for w in words]
         return all(w1 <= w2 for w1, w2 in zip(words, words[1:]))
 
+# 1- liner
+class Solution(object):
+    def isAlienSorted(self, words, order):
+        """
+        :type words: List[str]
+        :type order: str
+        :rtype: bool
+        """
+        return words == sorted(words, key=lambda w: map(order.index, w))
+
 # Day 10 Linked List & Tree
 # 1290. Convert Binary Number in a Linked List to Integer
 # Approach : Bit Manipulation
@@ -593,6 +613,7 @@ class Solution(object):
             num = (num << 1) | head.next.val
             head = head.next
         return num
+
 # Approach : Binary Representation
 # Definition for singly-linked list.
 # class ListNode(object):
@@ -633,7 +654,13 @@ class Solution(object):
             slow = slow.next
             fast = fast.next.next
         return slow
+
 # 104. Maximum Depth of Binary Tree
+'''Solution: Recursion
+maxDepth(root) = max(maxDepth(root.left), maxDepth(root.right)) + 1
+
+Time complexity: O(n)
+Space complexity: O(n)'''
 # Definition for a binary tree node.
 # class TreeNode(object):
 #     def __init__(self, val=0, left=None, right=None):
@@ -673,7 +700,8 @@ class Solution(object):
         if (root.left and root.left.left==None and root.left.right==None):
             return root.left.val + self.sumOfLeftLeaves(root.right)
         return self.sumOfLeftLeaves(root.left) + self.sumOfLeftLeaves(root.right)
-# Iterative
+
+''' Iterative '''
 # Definition for a binary tree node.
 # class TreeNode(object):
 #     def __init__(self, val=0, left=None, right=None):
@@ -911,3 +939,1244 @@ class NumArray(object):
 # Your NumArray object will be instantiated and called as such:
 # obj = NumArray(nums)
 # param_1 = obj.sumRange(left,right)
+
+# Programming Skills II
+# Day 1
+# 896. Monotonic Array
+class Solution(object):
+    def isMonotonic(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: bool
+        """
+        inc = True
+        dec = True
+
+        for i in range(1, len(nums)):
+            inc = inc and nums[i] >= nums[i - 1]
+            dec = dec and nums[i] <= nums[i - 1]    
+
+        return inc or dec
+
+class Solution(object):
+    def isMonotonic(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: bool
+        """
+        return not {cmp(i, j) for i, j in zip(nums, nums[1:])} >= {1, -1}
+
+# 28. Implement strStr()
+class Solution(object):
+    def strStr(self, haystack, needle):
+        """
+        :type haystack: str
+        :type needle: str
+        :rtype: int
+        """
+        l1 = len(haystack)
+        l2 = len(needle)
+        for i in range(l1 - l2 + 1):
+            if haystack[i:i+l2] == needle: return i
+        return -1
+
+# Day 2
+# 110. Balanced Binary Tree
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def isBalanced(self, root):
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+        self.balanced = True
+        def height(root):
+            if not root or not self.balanced: return -1
+            l = height(root.left)
+            r = height(root.right)
+            if abs(l - r) > 1:
+                self.balanced = False
+                return -1
+            return max(l, r) + 1
+        height(root)
+        return self.balanced
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def isBalanced(self, root):
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+        if not root: return True
+        self.balanced = True
+       
+        def height(root,balanced):
+            if not root: return 0
+            left_height = height(root.left, self.balanced)
+            if not self.balanced:return -1 
+            right_height = height(root.right, self.balanced)
+            if not self.balanced:return -1
+            if abs(left_height-right_height) > 1:
+                self.balanced = False
+                return -1
+            return max(left_height,right_height) +1
+        height(root,self.balanced)
+        return self.balanced
+
+# 459. Repeated Substring Pattern
+'''
+Basic idea:
+
+First char of input string is first char of repeated substring
+Last char of input string is last char of repeated substring
+Let S1 = S + S (where S in input string)
+Remove 1 and last char of S1. Let this be S2
+If S exists in S2 then return true else false
+Let i be index in S2 where S starts then repeated substring length i + 1 
+and repeated substring S[0: i+1]
+'''
+class Solution(object):
+    def repeatedSubstringPattern(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+        if not str:
+            return False
+            
+        ss = (s + s)[1:-1]
+        return ss.find(s) != -1
+
+# Day 3
+# 150. Evaluate Reverse Polish Notation
+class Solution(object):
+    def evalRPN(self, tokens):
+        """
+        :type tokens: List[str]
+        :rtype: int
+        """
+        stack = []
+        for t in tokens:
+            if t not in "+-*/":
+                stack.append(int(t))
+            else:
+                r, l = stack.pop(), stack.pop()
+                if t == "+":
+                    stack.append(l+r)
+                elif t == "-":
+                    stack.append(l-r)
+                elif t == "*":
+                    stack.append(l*r)
+                else:# You can use int(float(l) / r) for division instead of` if statement. 
+                #int()will take the part of integer, which is wanted by this question.
+                    stack.append(int(float(l)/r))
+        return stack.pop()
+
+# 66. Plus One
+class Solution(object):
+    def plusOne(self, digits):
+        """
+        :type digits: List[int]
+        :rtype: List[int]
+        """
+        if len(digits) == 0:
+            digits = [1]
+        elif digits[-1] == 9:
+            digits = self.plusOne(digits[:-1])
+            digits.extend([0])
+        else:
+            digits[-1] += 1
+        return digits
+
+class Solution(object):
+    def plusOne(self, digits):
+        """
+        :type digits: List[int]
+        :rtype: List[int]
+        """
+        return map(int, list(str(int(''.join(map(str, digits))) + 1)))
+
+class Solution(object):
+    def plusOne(self, digits):
+        """
+        :type digits: List[int]
+        :rtype: List[int]
+        """
+        for i in range(len(digits)):
+            if digits[~i] < 9:
+                digits[~i] += 1
+                return digits
+            digits[~i] = 0
+        return [1] + [0] * len(digits)
+
+class Solution(object):
+    def plusOne(self, digits):
+        """
+        :type digits: List[int]
+        :rtype: List[int]
+        """
+        length = len(digits) - 1
+        while digits[length] == 9:
+            digits[length] = 0
+            length -= 1
+        if(length < 0):
+            digits = [1] + digits
+        else:
+            digits[length] += 1
+        return digits
+
+# Day 4
+# 1367. Linked List in Binary Tree
+'''
+Solution 1: Brute DFS
+Time O(N * min(L,H))
+Space O(H)
+where N = tree size, H = tree height, L = list length.
+'''
+
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def isSubPath(self, head, root):
+        """
+        :type head: ListNode
+        :type root: TreeNode
+        :rtype: bool
+        """
+        def dfs(head, root):
+            if not head: return True
+            if not root: return False
+            return root.val == head.val and (dfs(head.next, root.left) or dfs(head.next, root.right))
+        if not head: return True
+        if not root: return False
+        return dfs(head, root) or self.isSubPath(head, root.left) or self.isSubPath(head, root.right)
+'''
+Solution 2: DP
+Iterate the whole link, find the maximum matched length of prefix.
+Iterate the whole tree, find the maximum matched length of prefix.
+About this dp, @fukuzawa_yumi gave a link of reference:
+https://en.wikipedia.org/wiki/Knuth–Morris–Pratt_algorithm
+
+Time O(N + L)
+Space O(L + H)
+where N = tree size, H = tree height, L = list length.'''
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def isSubPath(self, head, root):
+        """
+        :type head: ListNode
+        :type root: TreeNode
+        :rtype: bool
+        """
+        A, dp = [head.val], [0]
+        i = 0
+        node = head.next
+        while node:
+            while i and node.val != A[i]:
+                i = dp[i - 1]
+            i += node.val == A[i]
+            A.append(node.val)
+            dp.append(i)
+            node = node.next
+
+        def dfs(root, i):
+            if not root: return False
+            while i and root.val != A[i]:
+                i = dp[i - 1]
+            i += root.val == A[i]
+            return i == len(dp) or dfs(root.left, i) or dfs(root.right, i)
+        return dfs(root, 0)
+
+# 43. Multiply Strings
+
+# Day 5
+# 67. Add Binary
+# https://leetcode.com/problems/add-binary/discuss/1679423/Well-Detailed-Explaination-Java-C%2B%2B-Python-oror-Easy-for-mind-to-Accept-it
+class Solution(object):
+    def addBinary(self, a, b):
+        """
+        :type a: str
+        :type b: str
+        :rtype: str
+        """
+        res = ""
+        i, j, carry = len(a) - 1, len(b) - 1, 0
+        while i >= 0 or j >= 0:
+            sum = carry
+            if i >= 0 : sum += ord(a[i]) - ord('0') # ord is use to get value of ASCII character
+            if j >= 0 : sum += ord(b[j]) - ord('0')
+            i, j = i - 1, j - 1
+            carry = 1 if sum > 1 else 0
+            res += str(sum % 2)
+
+        if carry != 0 : res += str(carry)
+        return res[::-1]
+
+# 989. Add to Array-Form of Integer
+'''Take K itself as a Carry
+Explanation
+Take K as a carry.
+Add it to the lowest digit,
+Update carry K,
+and keep going to higher digit.
+
+
+Complexity
+Insert will take O(1) time or O(N) time on shifting, depending on the data stucture.
+But in this problem K is at most 5 digit so this is restricted.
+So this part doesn't matter.
+
+The overall time complexity is O(N).
+For space I'll say O(1)
+
+With one loop.'''
+class Solution(object):
+    def addToArrayForm(self, num, k):
+        """
+        :type num: List[int]
+        :type k: int
+        :rtype: List[int]
+        """
+        for i in range(len(num) - 1, -1, -1):
+            k, num[i] = divmod(num[i] + k, 10)
+        return [int(i) for i in str(k)] + num if k else num
+
+# Day 6
+# 739. Daily Temperatures
+class Solution(object):
+    def dailyTemperatures(self, temperatures):
+        """
+        :type temperatures: List[int]
+        :rtype: List[int]
+        """
+        st = []
+        n = len(temperatures)
+        ans = [0] * n
+        for i in range(n - 1, -1, -1):
+            t = temperatures[i]
+            while st and temperatures[st[-1]] <= t:
+                st.pop()
+            if st:
+                ans[i] = (st[-1] - i)
+            st.append(i)
+
+        return ans
+
+# 58. Length of Last Word
+'''
+We can just split our string, remove all extra spaces 
+and return length of the last word, 
+however we need to spend O(n) time for this, where n is length of our string. 
+There is a simple optimization: let us traverse string from the end and:
+
+find the last element of last word: 
+traverse from the end and find first non-space symbol.
+continue traverse and find first space symbol (or beginning of string)
+return end - beg.
+Complexity: is O(m), 
+where m is length of part from first symbol of last word to the end. 
+Space complexity is O(1).
+'''
+class Solution(object):
+    def lengthOfLastWord(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        end = len(s) - 1
+        while end > 0 and s[end] == " ": end -= 1
+        beg = end
+        while beg >= 0 and s[beg] != " ": beg -= 1
+        return end - beg
+
+# one - liner
+class Solution(object):
+    def lengthOfLastWord(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        return 0 if not s.split() else len(s.split()[-1])
+# Day 7
+# 48. Rotate Image
+class Solution(object):
+    def rotate(self, matrix):
+        """
+        :type matrix: List[List[int]]
+        :rtype: None Do not return anything, modify matrix in-place instead.
+        """
+        n = len(matrix[0])
+        for i in range(n // 2 + n % 2):
+            for j in range(n // 2):
+                tmp = matrix[n - 1 - j][i]
+                matrix[n - 1 - j][i] = matrix[n - 1 - i][n - j - 1]
+                matrix[n - 1 - i][n - j - 1] = matrix[j][n - 1 -i]
+                matrix[j][n - 1 - i] = matrix[i][j]
+                matrix[i][j] = tmp
+
+# 1886. Determine Whether Matrix Can Be Obtained By Rotation
+'''
+In order to rotate clockwise, first reverse rows order, then transpose the matrix;
+Rotate 0, 1, 2, 3 times and compare the rotated matrix with target, respectively.'''
+class Solution(object):
+    def findRotation(self, mat, target):
+        """
+        :type mat: List[List[int]]
+        :type target: List[List[int]]
+        :rtype: bool
+        """
+        for _ in range(4): 
+            if mat == target: return True
+            mat = [list(x) for x in zip(*mat[::-1])]
+        return False 
+
+# Day 8
+# 54. Spiral Matrix
+# The con is mutating the matrix, if this is not allowed, 
+# we can make a deep copy of the matrix first. 
+# And of course it comes with the additional memory usage.
+class Solution(object):
+    def spiralOrder(self, matrix):
+        """
+        :type matrix: List[List[int]]
+        :rtype: List[int]
+        """
+        ret = []
+        while matrix:
+            ret += matrix.pop(0)
+            if matrix and matrix[0]:
+                for row in matrix:
+                    ret.append(row.pop())
+            if matrix:
+                ret += matrix.pop()[::-1]
+            if matrix and matrix[0]:
+                for row in matrix[::-1]:
+                    ret.append(row.pop(0))
+        return ret
+
+# 973. K Closest Points to Origin
+
+# Day 9
+# 1630. Arithmetic Subarrays
+class Solution(object):
+    def checkArithmeticSubarrays(self, nums, l, r):
+        """
+        :type nums: List[int]
+        :type l: List[int]
+        :type r: List[int]
+        :rtype: List[bool]
+        """
+        ans = []
+        
+        for i , j in zip(l , r):
+            arr = nums[i:j + 1]
+            arr.sort()
+            dif = []
+            
+            for i in range(len(arr) - 1):
+                dif.append(arr[i] - arr[i + 1])
+            
+            ans.append(len(set(dif)) == 1)
+        
+        return ans
+
+class Solution(object):
+    def checkArithmeticSubarrays(self, nums, l, r):
+        """
+        :type nums: List[int]
+        :type l: List[int]
+        :type r: List[int]
+        :rtype: List[bool]
+        """
+        ans = []
+        
+        def find_diffs(arr):
+            
+            arr.sort()
+
+            dif = []
+            
+            for i in range(len(arr) - 1):
+                dif.append(arr[i] - arr[i + 1])
+            
+            return len(set(dif)) == 1
+        
+        for i , j in zip(l , r):
+            ans.append(find_diffs(nums[i:j + 1]))
+        
+        return ans
+
+# 429. N-ary Tree Level Order Traversal
+"""
+# Definition for a Node.
+class Node(object):
+    def __init__(self, val=None, children=None):
+        self.val = val
+        self.children = children
+"""
+
+class Solution(object):
+    def levelOrder(self, root):
+        """
+        :type root: Node
+        :rtype: List[List[int]]
+        """
+        if root == None: return []
+        q = deque([root])
+        ans = []
+        while q:
+            level = []
+            for _ in range(len(q)):
+                curr = q.popleft()
+                level.append(curr.val)
+                for child in curr.children:
+                    q.append(child)
+            ans.append(level)
+        return ans
+
+# Day 10
+# 503. Next Greater Element II
+'''
+Loop Twice
+Explanation
+Loop once, we can get the Next Greater Number of a normal array.
+Loop twice, we can get the Next Greater Number of a circular array
+
+
+Complexity
+Time O(N) for one pass
+Spce O(N) in worst case
+'''
+class Solution(object):
+    def nextGreaterElements(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[int]
+        """
+        stack, res = [], [-1] * len(nums)
+        for i in range(len(nums)) * 2:
+            while stack and (nums[stack[-1]] < nums[i]):
+                res[stack.pop()] = nums[i]
+            stack.append(i)
+        return res
+
+# 556. Next Greater Element III
+# Next Permutation 
+class Solution(object):
+    def nextGreaterElement(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        digits = list(str(n))
+        length = len(digits)
+        
+        i, j = length-2, length-1
+        while i >= 0 and digits[i+1] <= digits[i]:
+            i -= 1
+        
+        if i == -1: return -1
+
+        while digits[j] <= digits[i]:
+            j -= 1
+        
+        digits[i], digits[j] = digits[j], digits[i]
+
+        res = int(''.join(digits[:i+1] + digits[i+1:][::-1]))
+        if res >= 2**31 or res == n:
+            return -1
+        return res
+
+# Day 11
+# 1376. Time Needed to Inform All Employees
+
+# 49. Group Anagrams
+
+# Day 12
+# 438. Find All Anagrams in a String
+
+# 713. Subarray Product Less Than K
+
+# Day 13
+# 304. Range Sum Query 2D - Immutable
+
+# 910. Smallest Range II
+'''
+Intuition:
+For each integer A[i],
+we may choose either x = -K or x = K.
+
+If we add K to all B[i], the result won't change.
+
+It's the same as:
+For each integer A[i], we may choose either x = 0 or x = 2 * K.
+
+Explanation:
+We sort the A first, and we choose to add x = 0 to all A[i].
+Now we have res = A[n - 1] - A[0].
+Starting from the smallest of A, we add 2 * K to A[i],
+hoping this process will reduce the difference.
+
+Update the new mx = max(mx, A[i] + 2 * K)
+Update the new mn = min(A[i + 1], A[0] + 2 * K)
+Update the res = min(res, mx - mn)
+
+Time Complexity:
+O(NlogN), in both of the worst and the best cases.
+In the Extending Reading part, I improve this to O(N) in half of cases.
+'''
+class Solution(object):
+    def smallestRangeII(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: int
+        """
+        nums.sort()
+        res = nums[-1] - nums[0]
+        for i in range(len(nums) - 1):
+            big = max(nums[-1], nums[i] + 2 * k)
+            small = min(nums[i + 1], nums[0] + 2 * k)
+            res = min(res, big - small)
+        return res
+
+# Day 14
+# 143. Reorder List
+
+# 138. Copy List with Random Pointer
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, x, next=None, random=None):
+        self.val = int(x)
+        self.next = next
+        self.random = random
+"""
+class Solution(object):
+    def copyRandomList(self, head):
+        """
+        :type head: Node
+        :rtype: Node
+        """
+        cache = {}
+        new_ptr = dummy = Node(-1)
+        
+        while head:
+            if head in cache: newnode = cache[head]
+            else:
+                newnode = Node(head.val)
+                cache[head] = newnode
+            new_ptr.next = newnode
+            new_ptr = new_ptr.next
+            if head.random:    
+                if head.random in cache: new_random = cache[head.random]
+                else:
+                    new_random = Node(head.random.val)
+                    cache[head.random] = new_random
+                new_ptr.random = new_random
+            head = head.next
+        return dummy.next
+
+# Day 15
+# 2. Add Two Numbers
+
+# 445. Add Two Numbers II
+'''
+Since there is no maximum of int in python, 
+we can computer the sum and then construct the result link list. 
+'''
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution(object):
+    def addTwoNumbers(self, l1, l2):
+        """
+        :type l1: ListNode
+        :type l2: ListNode
+        :rtype: ListNode
+        """
+        x1, x2 = 0, 0
+        while l1:
+            x1 = x1*10+l1.val
+            l1 = l1.next
+        while l2:
+            x2 = x2*10+l2.val
+            l2 = l2.next
+        x = x1 + x2
+        
+        head = ListNode(0)
+        if x == 0: return head
+        while x:
+            v, x = x%10, x//10
+            head.next, head.next.next = ListNode(v), head.next
+            
+        return head.next
+
+# Day 16
+# 61. Rotate List
+'''
+Solution: Find the prev of the new head
+
+Step 1: Get the tail node T while counting the length of the list.
+Step 2: k %= l, k can be greater than l, rotate k % l times has the same effect.
+Step 3: Find the previous node P of the new head N by moving (l – k – 1) steps from head
+Step 4: set P.next to null, T.next to head and return N
+
+Time complexity: O(n) n is the length of the list
+Space complexity: O(1)
+'''
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution(object):
+    def rotateRight(self, head, k):
+        """
+        :type head: ListNode
+        :type k: int
+        :rtype: ListNode
+        """
+        if not head: return head
+        tail = head
+        l = 1
+        while tail.next: 
+            tail = tail.next
+            l += 1
+        k = k % l
+        if k == 0: return head
+
+        prev = head
+        for _ in range(l - k - 1): prev = prev.next
+
+        new_head = prev.next
+        tail.next = head
+        prev.next = None
+        return new_head
+
+# 173. Binary Search Tree Iterator
+
+# Day 17
+# 1845. Seat Reservation Manager
+'''
+Use heap to save available seats
+
+Time: O(N) for init, O(logN) for other functions
+Space: O(N)'''
+class SeatManager(object):
+
+    def __init__(self, n):
+        """
+        :type n: int
+        """
+        self.heap = list(range(1, n + 1))
+
+    def reserve(self):
+        """
+        :rtype: int
+        """
+        return heapq.heappop(self.heap)
+        
+
+    def unreserve(self, seatNumber):
+        """
+        :type seatNumber: int
+        :rtype: None
+        """
+        heapq.heappush(self.heap, seatNumber)
+
+
+# Your SeatManager object will be instantiated and called as such:
+# obj = SeatManager(n)
+# param_1 = obj.reserve()
+# obj.unreserve(seatNumber)
+
+# 860. Lemonade Change
+'''
+Intuition:
+When the customer gives us $20, we have two options:
+
+To give three $5 in return
+To give one $5 and one $10.
+On insight is that the second option (if possible) is always better 
+than the first one.
+Because two $5 in hand is always better than one $10
+
+
+Explanation:
+Count the number of $5 and $10 in hand.
+
+if (customer pays with $5) five++;
+if (customer pays with $10) ten++, five--;
+if (customer pays with $20) ten--, five-- or five -= 3;
+
+Check if five is positive, otherwise return false.
+
+
+Time Complexity
+Time O(N) for one iteration
+Space O(1)
+'''
+class Solution(object):
+    def lemonadeChange(self, bills):
+        """
+        :type bills: List[int]
+        :rtype: bool
+        """
+        five = ten = 0
+        for i in bills:
+            if i == 5: five += 1
+            elif i == 10: five, ten = five - 1, ten + 1
+            elif ten > 0: five, ten = five - 1, ten - 1
+            else: five -= 3
+            if five < 0: return False
+        return True
+
+# Day 18
+# 155. Min Stack
+
+# 341. Flatten Nested List Iterator
+# """
+# This is the interface that allows for creating nested lists.
+# You should not implement it, or speculate about its implementation
+# """
+#class NestedInteger(object):
+#    def isInteger(self):
+#        """
+#        @return True if this NestedInteger holds a single integer, rather than a nested list.
+#        :rtype bool
+#        """
+#
+#    def getInteger(self):
+#        """
+#        @return the single integer that this NestedInteger holds, if it holds a single integer
+#        Return None if this NestedInteger holds a nested list
+#        :rtype int
+#        """
+#
+#    def getList(self):
+#        """
+#        @return the nested list that this NestedInteger holds, if it holds a nested list
+#        Return None if this NestedInteger holds a single integer
+#        :rtype List[NestedInteger]
+#        """
+
+class NestedIterator(object):
+
+    def __init__(self, nestedList):
+        """
+        Initialize your data structure here.
+        :type nestedList: List[NestedInteger]
+        """
+        self.stack = nestedList[::-1]
+
+    def next(self):
+        """
+        :rtype: int
+        """
+        return self.stack.pop().getInteger()
+        
+'''we can simply pop off the top element and the extend it with the new inner lists: 
+self.stack.extend(self.stack.pop().getList()[::-1]). 
+We also reduce a line because there is no need to define top'''
+    def hasNext(self):
+        """
+        :rtype: bool
+        """
+        while self.stack:
+            if self.stack[-1].isInteger():
+                return True
+            self.stack.extend(self.stack.pop().getList()[::-1])
+        return False
+        
+
+# Your NestedIterator object will be instantiated and called as such:
+# i, v = NestedIterator(nestedList), []
+# while i.hasNext(): v.append(i.next())
+
+# Day 19
+# 1797. Design Authentication Manager
+'''
+Solution: Hashtable
+Use a hashtable to store the token and its expiration time.
+
+Time complexity: at most O(n) per operation
+Space complexity: O(n)
+'''
+class AuthenticationManager(object):
+
+    def __init__(self, timeToLive):
+        """
+        :type timeToLive: int
+        """
+        self.token = dict()
+        self.time = timeToLive    # store timeToLive and create dictionary
+        
+
+    def generate(self, tokenId, currentTime):
+        """
+        :type tokenId: str
+        :type currentTime: int
+        :rtype: None
+        """
+        self.token[tokenId] = currentTime    # store tokenId with currentTime
+        
+
+    def renew(self, tokenId, currentTime):
+        """
+        :type tokenId: str
+        :type currentTime: int
+        :rtype: None
+        """
+        limit = currentTime-self.time        # calculate limit time to filter unexpired tokens
+        if tokenId in self.token and self.token[tokenId]>limit:    # filter tokens and renew its time
+            self.token[tokenId] = currentTime
+        
+
+    def countUnexpiredTokens(self, currentTime):
+        """
+        :type currentTime: int
+        :rtype: int
+        """
+        limit = currentTime-self.time       # calculate limit time to filter unexpired tokens
+        c = 0
+        for i in self.token:
+            if self.token[i]>limit:         # count unexpired tokens
+                c+=1
+        return c
+
+
+# Your AuthenticationManager object will be instantiated and called as such:
+# obj = AuthenticationManager(timeToLive)
+# obj.generate(tokenId,currentTime)
+# obj.renew(tokenId,currentTime)
+# param_3 = obj.countUnexpiredTokens(currentTime)
+
+# 707. Design Linked List
+
+# Day 20
+# 380. Insert Delete GetRandom O(1)
+'''
+In python, creating a simple api for a set() would be a perfect solution 
+if not for the third operation, getRandom(). 
+We know that we can retrieve an item from a set, 
+and not know what that item will be, but that would not be actually random. 
+(This is due to the way python implements sets. 
+In python3, when using integers, elements are popped from the set in the order 
+they appear in the underlying
+hashtable. Hence, not actually random.)
+
+A set is implemented essentially the same as a dict in python, 
+so the time complexity of add / delete is on average O(1). 
+When it comes to the random function, however, we run into the problem of 
+needing to convert the data into a python list in order to return 
+a random element. That conversion will add a significant overhead to getRandom,
+ thus slowing the whole thing down.
+
+Instead of having to do that type conversion (set to list) 
+we can take an approach that involves maintaining both a list and a dictionary 
+side by side. That might look something like:
+
+data_map == {4: 0, 6: 1, 2: 2, 5: 3}
+data == [4, 6, 2, 5]
+Notice that the key in the data_map is the element in the list, 
+and the value in the data_map is the index the element is at in the list.
+Notes:
+
+this can be made more efficient by removing the variables last_elem_in_list and index_of_elem_to_remove. 
+I have used this to aid in readability.
+the remove operation might appear complicated so here's a before and after of what the data looks like:
+element_to_remove = 7
+
+before:     [4, 7, 9, 3, 5]
+after:      [4, 5, 9, 3]
+
+before:     {4:0, 7:1, 9:2, 3:3, 5:4}
+after:      {4:0, 9:2, 3:3, 5:1}
+All we're doing is replacing the element in the list that needs to be removed with the last element in the list.
+And then we update the values in the dictionary to reflect that.'''
+class RandomizedSet(object):
+
+    def __init__(self):
+        self.data_map = {} # dictionary, aka map, aka hashtable, aka hashmap
+        self.data = [] # list aka array
+
+    def insert(self, val):
+        """
+        :type val: int
+        :rtype: bool
+        """
+        # the problem indicates we need to return False if the item 
+        # is already in the RandomizedSet---checking if it's in the
+        # dictionary is on average O(1) where as
+        # checking the array is on average O(n)
+        if val in self.data_map:
+            return False
+        
+        # add the element to the dictionary. Setting the value as the 
+        # length of the list will accurately point to the index of the 
+        # new element. (len(some_list) is equal to the index of the last item +1)
+        self.data_map[val] = len(self.data)
+
+        # add to the list
+        self.data.append(val)
+        
+        return True
+        
+
+    def remove(self, val):
+        """
+        :type val: int
+        :rtype: bool
+        """
+        # again, if the item is not in the data_map, return False. 
+        # we check the dictionary instead of the list due to lookup complexity
+        if not val in self.data_map:
+            return False
+
+        # essentially, we're going to move the last element in the list 
+        # into the location of the element we want to remove. 
+        # this is a significantly more efficient operation than the obvious 
+        # solution of removing the item and shifting the values of every item 
+        # in the dicitionary to match their new position in the list
+        last_elem_in_list = self.data[-1]
+        index_of_elem_to_remove = self.data_map[val]
+
+        self.data_map[last_elem_in_list] = index_of_elem_to_remove
+        self.data[index_of_elem_to_remove] = last_elem_in_list
+
+        # change the last element in the list to now be the value of the element 
+        # we want to remove
+        self.data[-1] = val
+
+        # remove the last element in the list
+        self.data.pop()
+
+        # remove the element to be removed from the dictionary
+        self.data_map.pop(val)
+        return True
+        
+
+    def getRandom(self):
+        """
+        :rtype: int
+        """
+        # if running outside of leetcode, you need to `import random`.
+        # random.choice will randomly select an element from the list of data.
+        return random.choice(self.data)
+
+
+# Your RandomizedSet object will be instantiated and called as such:
+# obj = RandomizedSet()
+# param_1 = obj.insert(val)
+# param_2 = obj.remove(val)
+# param_3 = obj.getRandom()
+
+# 622. Design Circular Queue
+'''
+Solution: Simulate with an array
+We need a fixed length array, 
+and the head location as well as the size of the current queue.
+
+We can use q[head] to access the front, 
+and q[(head + size – 1) % k] to access the rear.
+
+Time complexity: O(1) for all the operations.
+Space complexity: O(k)
+'''
+class MyCircularQueue(object):
+
+    def __init__(self, k):
+        """
+        :type k: int
+        """
+        self.q = [0] * k
+        self.k = k
+        self.head = self.size = 0
+        
+
+    def enQueue(self, value):
+        """
+        :type value: int
+        :rtype: bool
+        """
+        if self.isFull(): return False
+        self.q[(self.head + self.size) % self.k] = value
+        self.size += 1
+        return True
+
+    def deQueue(self):
+        """
+        :rtype: bool
+        """
+        if self.isEmpty(): return False
+        self.head = (self.head + 1) % self.k
+        self.size -= 1
+        return True
+        
+
+    def Front(self):
+        """
+        :rtype: int
+        """
+        return -1 if self.isEmpty() else self.q[self.head]
+
+
+    def Rear(self):
+        """
+        :rtype: int
+        """
+        return -1 if self.isEmpty() else self.q[(self.head + self.size - 1) % self.k]
+        
+
+    def isEmpty(self):
+        """
+        :rtype: bool
+        """
+        return self.size == 0
+
+    def isFull(self):
+        """
+        :rtype: bool
+        """
+        return self.size == self.k
+
+
+# Your MyCircularQueue object will be instantiated and called as such:
+# obj = MyCircularQueue(k)
+# param_1 = obj.enQueue(value)
+# param_2 = obj.deQueue()
+# param_3 = obj.Front()
+# param_4 = obj.Rear()
+# param_5 = obj.isEmpty()
+# param_6 = obj.isFull()
+
+'''
+Complexity:
+
+Time: Each operation take O(1)
+Space: O(k)'''
+class MyCircularQueue(object):
+
+    def __init__(self, k):
+        """
+        :type k: int
+        """
+        self.head = self.tail = self.size = 0
+        self.arr = [0] * k
+        
+
+    def enQueue(self, value):
+        """
+        :type value: int
+        :rtype: bool
+        """
+        if self.isFull(): return False
+        self.arr[self.tail] = value
+        self.tail = (self.tail + 1) % len(self.arr)
+        self.size += 1
+        return True
+
+    def deQueue(self):
+        """
+        :rtype: bool
+        """
+        if self.isEmpty(): return False
+        self.head = (self.head + 1) % len(self.arr)
+        self.size -= 1
+        return True
+        
+
+    def Front(self):
+        """
+        :rtype: int
+        """
+        if self.isEmpty(): return -1
+        return self.arr[self.head]
+
+
+    def Rear(self):
+        """
+        :rtype: int
+        """
+        if self.isEmpty(): return -1
+        return self.arr[self.tail-1]
+        
+
+    def isEmpty(self):
+        """
+        :rtype: bool
+        """
+        return self.size == 0
+
+    def isFull(self):
+        """
+        :rtype: bool
+        """
+        return self.size == len(self.arr)
+
+
+# Your MyCircularQueue object will be instantiated and called as such:
+# obj = MyCircularQueue(k)
+# param_1 = obj.enQueue(value)
+# param_2 = obj.deQueue()
+# param_3 = obj.Front()
+# param_4 = obj.Rear()
+# param_5 = obj.isEmpty()
+# param_6 = obj.isFull()
+
+# 729. My Calendar I
+class MyCalendar(object):
+
+    def __init__(self):
+         self.calendar = []
+
+    def book(self, start, end):
+        """
+        :type start: int
+        :type end: int
+        :rtype: bool
+        """
+        for s, e in self.calendar:
+            if s < end and start < e:
+                return False
+        self.calendar.append((start, end))
+        return True
+
+
+# Your MyCalendar object will be instantiated and called as such:
+# obj = MyCalendar()
+# param_1 = obj.book(start,end)
