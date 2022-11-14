@@ -2257,3 +2257,4907 @@ class Solution:
 # 2001. Number of Pairs of Interchangeable Rectangles
 
 # 2000. Reverse Prefix of Word
+
+# 2065. Maximum Path Quality of a Graph
+#  Concise DFS
+class Solution(object):
+    def maximalPathQuality(self, A, edges, maxTime):
+        """
+        :type values: List[int]
+        :type edges: List[List[int]]
+        :type maxTime: int
+        :rtype: int
+        """
+        G = collections.defaultdict(dict)
+        for i, j, t in edges:
+            G[i][j] = G[j][i] = t
+
+        def dfs(i, seen, time):
+            res = sum(A[j] for j in seen) if i == 0 else 0
+            for j in G[i]:
+                if time >= G[i][j]:
+                    res = max(res, dfs(j, seen | {j}, time - G[i][j]))
+            return res
+
+        return dfs(0, {0}, maxTime)
+
+# 2068. Check Whether Two Strings are Almost Equivalent
+
+# 2069. Walking Robot Simulation II
+
+# 2070. Most Beautiful Item for Each Query
+class Solution(object):
+    def maximumBeauty(self, A, queries):
+        """
+        :type items: List[List[int]]
+        :type queries: List[int]
+        :rtype: List[int]
+        """
+        A = sorted(A + [[0, 0]])
+        for i in xrange(len(A) - 1):
+            A[i + 1][1] = max(A[i][1], A[i + 1][1])
+        return [A[bisect.bisect(A, [q + 1]) - 1][1] for q in queries]
+
+# 2071. Maximum Number of Tasks You Can Assign
+
+# 2073. Time Needed to Buy Tickets
+
+# 2074. Reverse Nodes in Even Length Groups
+
+# 2075. Decode the Slanted Ciphertext
+
+# 2076. Process Restricted Friend Requests
+
+# 2047. Number of Valid Words in a Sentence
+'''Solution 2: Regex
+Time complexity: O(n^2)?
+Space complexity: O(1)
+'''
+class Solution:
+    def countValidWords(self, sentence: str) -> int:
+        ans = 0
+        for word in sentence.split():
+            if word.strip() and re.fullmatch('^([a-z]+(-?[a-z]+)?)?[\.,!]?$', word.strip()):
+                ans += 1
+        return ans
+
+# 1899. Merge Triplets to Form Target Triplet
+
+# 1900. The Earliest and Latest Rounds Where Players Compete
+
+# 1903. Largest Odd Number in String
+
+# 1904. The Number of Full Rounds You Have Played
+
+# 1897. Redistribute Characters to Make All Strings Equal
+'''Solution: Hashtable
+Count the frequency of each character, it must be a multiplier of n such that we can evenly distribute it to all the words.
+e.g. n = 3, a = 9, b = 6, c = 3, each word will be “aaabbc”.
+
+Time complexity: O(n)
+Space complexity: O(1)'''
+class Solution(object):
+    def makeEqual(self, words):
+        """
+        :type words: List[str]
+        :rtype: bool
+        """
+        return all(c % len(words) == 0 for c in Counter(''.join(words)).values())
+
+# 1896. Minimum Cost to Change the Final Value of Expression
+
+# 1895. Largest Magic Square
+
+# 1894. Find the Student that Will Replace the Chalk
+
+# 1893. Check if All the Integers in a Range Are Covered
+'''Explanation
+all values in range(left, right + 1),
+should be in any one interval (l, r).
+
+
+Complexity
+Time O((right - left) * n),
+where n = ranges.length
+Space O(1)'''
+class Solution(object):
+    def isCovered(self, ranges, left, right):
+        """
+        :type ranges: List[List[int]]
+        :type left: int
+        :type right: int
+        :rtype: bool
+        """
+        return all(any(l <= i <= r for l, r in ranges) for i in xrange(left, right + 1))
+
+# 1887. Reduction Operations to Make the Array Elements Equal
+
+# 1888. Minimum Number of Flips to Make the Binary String Alternating
+
+# 1889. Minimum Space Wasted From Packaging
+
+# 1880. Check if Word Equals Summation of Two Words
+
+# 1879. Minimum XOR Sum of Two Arrays
+
+# 1878. Get Biggest Three Rhombus Sums in a Grid
+
+# 1877. Minimize Maximum Pair Sum in Array
+
+# 1876. Substrings of Size Three with Distinct Characters
+'''Solution: Brute Force w/ (Hash)Set
+Time complexity: O(n)
+Space complexity: O(1)'''
+class Solution(object):
+    def countGoodSubstrings(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        return sum(len(set(s[i:i + 3])) == 3 for i in range(len(s) - 2))
+
+# 1872. Stone Game VIII
+
+# 1871. Jump Game VII
+'''One Pass DP
+
+Explanation
+dp[i] = true if we can reach s[i].
+pre means the number of previous position that we can jump from.
+
+Complexity
+Time O(n)
+Space O(n)'''
+class Solution(object):
+    def canReach(self, s, minJump, maxJump):
+        """
+        :type s: str
+        :type minJump: int
+        :type maxJump: int
+        :rtype: bool
+        """
+        dp = [c == '0' for c in s]
+        pre = 0
+        for i in xrange(1, len(s)):
+            if i >= minJump: pre += dp[i - minJump]
+            if i > maxJump: pre -= dp[i - maxJump - 1]
+            dp[i] &= pre > 0
+        return dp[-1]
+
+# 1869. Longer Contiguous Segments of Ones than Zeros
+
+# 1866. Number of Ways to Rearrange Sticks With K Sticks Visible
+'''Solution: DP
+dp(n, k) = dp(n – 1, k – 1) + (n-1) * dp(n-1, k)
+
+Time complexity: O(n*k)
+Space complexity: O(n*k) -> O(k)'''
+class Solution:
+    @lru_cache(maxsize=None)
+    def rearrangeSticks(self, n: int, k: int) -> int:
+        if k == 0: return 0
+        if k == n or n <= 2: return 1
+        return (self.rearrangeSticks(n - 1, k - 1) + 
+                (n - 1) * self.rearrangeSticks(n - 1, k)) % (10**9 + 7)
+
+# 1865. Finding Pairs With a Certain Sum
+'''Solution: HashTable
+Note nums1 and nums2 are unbalanced. 
+Brute force method will take O(m*n) = O(103*105) = O(108) 
+for each count call which will TLE. 
+We could use a hashtable to store the counts of elements from nums2, 
+and only iterate over nums1 to reduce the time complexity.
+
+Time complexity:
+
+init: O(m) + O(n)
+add: O(1)
+count: O(m)
+
+Total time is less than O(106)
+
+Space complexity: O(m + n)'''
+class FindSumPairs:
+
+    def __init__(self, nums1: List[int], nums2: List[int]):
+        self.nums1 = nums1
+        self.nums2 = nums2
+        self.freq = Counter(nums2)
+
+    def add(self, index: int, val: int) -> None:
+        self.freq.subtract((self.nums2[index],))
+        self.nums2[index] += val
+        self.freq.update((self.nums2[index],))
+
+    def count(self, tot: int) -> int:
+        return sum(self.freq[tot - a] for a in self.nums1)
+
+
+# Your FindSumPairs object will be instantiated and called as such:
+# obj = FindSumPairs(nums1, nums2)
+# obj.add(index,val)
+# param_2 = obj.count(tot)
+
+# 1864. Minimum Number of Swaps to Make the Binary String Alternating
+
+# 1863. Sum of All Subset XOR Totals
+'''Solution 1: Brute Force
+Use an array A to store all the xor subsets, for a given number x
+A = A + [x ^ a for a in A]
+
+Time complexity: O(2n)
+Space complexity: O(2n)'''
+class Solution:
+    def subsetXORSum(self, nums: List[int]) -> int:
+        xors = [0]
+        for x in nums:
+          xors += [xor ^ x for xor in xors]    
+        return sum(xors)
+
+# 1860. Incremental Memory Leak
+'''Solution: Simulation
+Time complexity: O(max(memory1, memory2)0.5)
+Space complexity: O(1)
+
+'''
+class Solution:
+    def memLeak(self, memory1: int, memory2: int) -> List[int]:
+        for i in range(1, 2**30):
+          if max(memory1, memory2) < i:
+            return [i, memory1, memory2]
+          elif memory1 >= memory2:
+            memory1 -= i
+          else:
+            memory2 -= i
+        return None
+
+# 1859. Sorting the Sentence
+'''Solution: String
+Time complexity: O(n)
+Space complexity: O(n)'''
+class Solution:
+    def sortSentence(self, s: str) -> str:
+        p = [(w[:-1], int(w[-1])) for w in s.split()]
+        p.sort(key=lambda x : x[1])
+        return " ".join((w for w, _ in p))
+
+# 1857. Largest Color Value in a Directed Graph
+'''Solution: Topological Sorting
+freq[n][c] := max freq of color c after visiting node n.
+
+Time complexity: O(n)
+Space complexity: O(n*26)
+
+'''
+class Solution:
+    def largestPathValue(self, colors: str, edges: List[List[int]]) -> int:
+        INF = 1e9
+        n = len(colors)
+        g = [[] for _ in range(n)]
+        for u, v in edges:
+          g[u].append(v)    
+        visited = [0] * n
+        freq = [[0] * 26 for _ in range(n)]
+        def dfs(u: int) -> int:
+          idx = ord(colors[u]) - ord('a')
+          if not visited[u]:
+            visited[u] = 1 # visiting
+            for v in g[u]:
+              if (dfs(v) == INF):
+                return INF
+              for c in range(26):
+                freq[u][c] = max(freq[u][c], freq[v][c])
+            freq[u][idx] += 1
+            visited[u] = 2 # done
+          return freq[u][idx] if visited[u] == 2 else INF
+        ans = 0
+        for u in range(n):
+          ans = max(ans, dfs(u))
+          if ans == INF: break
+        return -1 if ans == INF else ans
+
+# 1854. Maximum Population Year
+
+# 1851. Minimum Interval to Include Each Query
+'''Priority Queue Solution
+
+Explanation
+Sort queries and intervals.
+Iterate queries from small to big,
+and find out all open intervals [l, r],
+and we add them to a priority queue.
+Also, we need to remove all closed interval from the queue.
+
+In the priority, we use
+[interval size, interval end] = [r-l+1, r] as the key.
+
+The head of the queue is the smallest interval we want to return for each query.
+
+
+Complexity
+Time O(nlogn + qlogq)
+Space O(n+q)
+where q = queries.size()
+'''
+class Solution(object):
+    def minInterval(self, A, queries):
+        """
+        :type intervals: List[List[int]]
+        :type queries: List[int]
+        :rtype: List[int]
+        """
+        A = sorted(A)[::-1]
+        h = []
+        res = {}
+        for q in sorted(queries):
+            while A and A[-1][0] <= q:
+                i, j = A.pop()
+                if j >= q:
+                    heapq.heappush(h, [j - i + 1, j])
+            while h and h[0][1] < q:
+                heapq.heappop(h)
+            res[q] = h[0][0] if h else -1
+        return [res[q] for q in queries]
+
+# 1850. Minimum Adjacent Swaps to Reach the Kth Smallest Number
+
+# 1849. Splitting a String Into Descending Consecutive Values
+
+# 1848. Minimum Distance to the Target Element
+
+# 1847. Closest Room
+
+# 1846. Maximum Element After Decreasing and Rearranging
+
+# 1844. Replace All Digits with Characters
+''' Straight Forward
+
+Complexity
+Time O(n)
+Space O(n)'''
+class Solution(object):
+    def replaceDigits(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        return ''.join(chr(ord(s[i-1]) + int(s[i])) if i % 2 else s[i] for i in xrange(len(s)))
+
+# 1840. Maximum Building Height
+
+# 1839. Longest Substring Of All Vowels in Order
+
+# 1837. Sum of Digits in Base K
+
+# 1835. Find XOR Sum of All Pairs Bitwise AND
+
+# 1834. Single-Threaded CPU
+
+# 1833. Maximum Ice Cream Bars
+
+# 1832. Check if the Sentence Is Pangram
+class Solution(object):
+    def checkIfPangram(self, sentence):
+        """
+        :type sentence: str
+        :rtype: bool
+        """
+        return len(set(sentence)) == 26
+
+# 1830. Minimum Number of Operations to Make String Sorted
+
+# 1829. Maximum XOR for Each Query
+
+# 1828. Queries on Number of Points Inside a Circle
+
+# 1827. Minimum Operations to Make the Array Increasing
+
+# 1825. Finding MK Average
+
+# 1824. Minimum Sideway Jumps
+
+# 1819. Number of Different Subsequences GCDs
+
+# 1817. Finding the Users Active Minutes
+
+# 1816. Truncate Sentence
+'''Solution:
+Time complexity: O(n)
+Space complexity: O(n)'''
+class Solution(object):
+    def truncateSentence(self, s, k):
+        """
+        :type s: str
+        :type k: int
+        :rtype: str
+        """
+        return " ".join(s.split()[:k])
+
+# 1815. Maximum Number of Groups Getting Fresh Donuts
+
+# 1814. Count Nice Pairs in an Array
+'''Straight Forward
+
+Explanation
+A[i] + rev(A[j]) == A[j] + rev(A[i])
+A[i] - rev(A[i]) == A[j] - rev(A[j])
+B[i] = A[i] - rev(A[i])
+
+Then it becomes an easy question that,
+how many pairs in B with B[i] == B[j]
+
+
+Complexity
+Time O(nloga)
+Space O(n)'''
+class Solution(object):
+    def countNicePairs(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        res = 0
+        count = collections.Counter()
+        for a in nums:
+            b = int(str(a)[::-1])
+            res += count[a - b]
+            count[a - b] += 1
+        return res % (10**9 + 7)
+
+# 1813. Sentence Similarity III
+'''Solution: Dequeue / Common Prefix + Suffix
+Break sequences to words, store them in two deques. 
+Pop the common prefix and suffix. 
+At least one of the deque should be empty.
+
+Time complexity: O(m+n)
+Space complexity: O(m+n)
+
+'''
+class Solution:
+    def areSentencesSimilar(self, sentence1: str, sentence2: str) -> bool:
+        w1 = deque(sentence1.split())
+        w2 = deque(sentence2.split())
+        while w1 and w2 and w1[0] == w2[0]:
+          w1.popleft(), w2.popleft()
+        while w1 and w2 and w1[-1] == w2[-1]:
+          w1.pop(), w2.pop()
+        return len(w1) * len(w2) == 0
+
+# 1812. Determine Color of a Chessboard Square
+
+# 1808. Maximize Number of Nice Divisors
+
+# 1807. Evaluate the Bracket Pairs of a String\
+
+# 1806. Minimum Number of Operations to Reinitialize a Permutation
+
+# 1805. Number of Different Integers in a String
+class Solution(object):
+    def numDifferentIntegers(self, word):
+        """
+        :type word: str
+        :rtype: int
+        """
+        s = ''.join(c if c.isdigit() else ' ' for c in word)
+        return len(set(map(int, s.split())))
+
+class Solution(object):
+    def numDifferentIntegers(self, word):
+        """
+        :type word: str
+        :rtype: int
+        """
+        return len(set(map(int, re.findall(r'\d+', word))))
+
+# 1801. Number of Orders in the Backlog
+'''Priority Queue
+
+Complexity
+Time O(nlogn)
+Space O(n)'''
+class Solution(object):
+    def getNumberOfBacklogOrders(self, orders):
+        """
+        :type orders: List[List[int]]
+        :rtype: int
+        """
+        sell, buy = [], []
+        for p, a, t in orders:
+            if t == 0:
+                heapq.heappush(buy, [-p, a])
+            else:
+                heapq.heappush(sell, [p, a])
+            while sell and buy and sell[0][0] <= -buy[0][0]:
+                k = min(buy[0][1], sell[0][1])
+                buy[0][1] -= k
+                sell[0][1] -= k
+                if buy[0][1] == 0: heapq.heappop(buy)
+                if sell[0][1] == 0: heapq.heappop(sell)
+        return sum(a for p, a in buy + sell) % (10**9 + 7)
+
+# 1800. Maximum Ascending Subarray Sum
+
+# 1799. Maximize Score After N Operations
+
+# 1798. Maximum Number of Consecutive Values You Can Make
+
+# 1796. Second Largest Digit in a String
+
+# 1793. Maximum Score of a Good Subarray
+
+# 1792. Maximum Average Pass Ratio
+'''Solution: Greedy + Heap
+
+Sort by the ratio increase potential (p + 1) / (t + 1) - p / t.
+
+Time complexity: O((m+n)logn)
+Space complexity: O(n)'''
+class Solution:
+    def maxAverageRatio(self, classes: List[List[int]], extraStudents: int) -> float:
+        def ratio(i, delta=0):
+          return (classes[i][0] + delta) / (classes[i][1] + delta)
+        q = []
+        for i, c in enumerate(classes):
+          heapq.heappush(q, (-(ratio(i, 1) - ratio(i)), i))
+        for _ in range(extraStudents):
+          _, i = heapq.heappop(q)
+          classes[i][0] += 1
+          classes[i][1] += 1
+          heapq.heappush(q, (-(ratio(i, 1) - ratio(i)), i))
+        return mean(ratio(i) for i, _ in enumerate(classes))
+
+# 1791. Find Center of Star Graph
+'''Since the center node must appear in each edge, 
+we just need to find the mode of edges[0] + edges[1]
+
+Time complexity: O(1)
+Space complexity: O(1)'''
+class Solution:
+    def findCenter(self, edges: List[List[int]]) -> int:
+        return mode(edges[0] + edges[1])
+
+# 1727. Largest Submatrix With Rearrangements
+
+# 1732. Find the Highest Altitude
+
+# 1733. Minimum Number of People to Teach
+
+# 1734. Decode XORed Permutation
+
+# 1736. Latest Time by Replacing Hidden Digits
+
+# 1737. Change Minimum Characters to Satisfy One of Three Conditions
+'''Clean Solution
+
+Explanation
+Count the frequcy of each character in a and b.
+Find the most common characters most_common = max((c1 + c2).values()),
+this help meet the condition 3 with m + n - most_common.
+
+The we calculate the accumulate prefix sum of count.
+This help finding the number of smaller characters in O(1) time.
+
+Enumerate the character i a,b,c...x,y,
+To meet condition 1,
+which is a < b,
+we need (m - c1[i]) + c2[i]
+
+To meet condition 2,
+which is a > b,
+we need n - c2[i] + c1[i]
+
+
+Complexity
+Time O(m + n)
+Space O(26)'''
+class Solution(object):
+    def minCharacters(self, a, b):
+        """
+        :type a: str
+        :type b: str
+        :rtype: int
+        """
+        m, n = len(a), len(b)
+        c1 = Counter(ord(c) - 97 for c in a)
+        c2 = Counter(ord(c) - 97 for c in b)
+        res = m + n - max((c1 + c2).values()) # condition 3
+        for i in range(25):
+            c1[i + 1] += c1[i]
+            c2[i + 1] += c2[i]
+            res = min(res, m - c1[i] + c2[i]) # condition 1
+            res = min(res, n - c2[i] + c1[i]) # condition 2
+        return res
+
+# 1738. Find Kth Largest XOR Coordinate Value
+
+# 1739. Building Boxes
+
+# 1742. Maximum Number of Balls in a Box
+'''Solution: Hashtable and base-10
+Max sum will be 9+9+9+9+9 = 45
+
+Time complexity: O((hi-lo) * log(hi))
+Space complexity: O(1)'''
+class Solution(object):
+    def countBalls(self, lowLimit, highLimit):
+        """
+        :type lowLimit: int
+        :type highLimit: int
+        :rtype: int
+        """
+        balls = defaultdict(int)
+        ans = 0
+        for x in range(lowLimit, highLimit + 1):
+          s = sum(int(d) for d in str(x))
+          balls[s] += 1
+          ans = max(ans, balls[s])
+        return ans
+
+# 1743. Restore the Array From Adjacent Pairs
+
+# 1744. Can You Eat Your Favorite Candy on Your Favorite Day?
+
+# 1745. Palindrome Partitioning IV
+
+# 1748. Sum of Unique Elements
+
+# 1749. Maximum Absolute Sum of Any Subarray
+
+# 1750. Minimum Length of String After Deleting Similar Ends
+
+# 1751. Maximum Number of Events That Can Be Attended II
+'''DP
+
+Explanation
+For each meeting,
+find the maximum value we can get before this meeting starts.
+Repeatly doing this K times.
+
+
+Complexity
+Time O(knlogn), can be improved to O(nk) like Knapsack problem
+Space O(n)'''
+class Solution(object):
+    def maxValue(self, events, k):
+        """
+        :type events: List[List[int]]
+        :type k: int
+        :rtype: int
+        """
+        events.sort(key=lambda sev: sev[1])
+        dp, dp2 = [[0, 0]], [[0, 0]]
+        for k0 in xrange(k):
+            for s, e, v in events:
+                i = bisect.bisect(dp, [s]) - 1
+                if dp[i][1] + v > dp2[-1][1]:
+                    dp2.append([e, dp[i][1] + v])
+            dp, dp2 = dp2, [[0, 0]]
+        return dp[-1][-1]
+
+# 1752. Check if Array Is Sorted and Rotated
+''' Easy and Concise
+
+Explanation
+Compare all neignbour elements (a,b) in A,
+the case of a > b can happen at most once.
+
+Note that the first element and the last element are also connected.
+
+If all a <= b, A is already sorted.
+If all a <= b but only one a > b,
+we can rotate and make b the first element.
+Other case, return false.
+
+
+Complexity
+Time O(n)
+Space O(1)
+''''
+class Solution(object):
+    def check(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: bool
+        """
+        return sum(a > b for a, b in zip(nums, nums[1:] + nums[:1])) <= 1
+
+# 1753. Maximum Score From Removing Stones
+
+# 1754. Largest Merge Of Two Strings
+''' Easy Greedy
+
+Explanation
+Just compare the string s1 and s2,
+if s1 >= s2, take from s1
+if s1 < s2, take from s2
+
+it makes sense once you come up with it.
+
+
+Complexity
+Feel like it's
+Time O(m^2+n^2)
+Space O(m^2+n^2)'''
+class Solution(object):
+    def largestMerge(self, word1, word2):
+        """
+        :type word1: str
+        :type word2: str
+        :rtype: str
+        """
+        if word1 >= word2 > '':
+            return word1[0] + self.largestMerge(word1[1:], word2)
+        if word2 >= word1 > '':
+            return word2[0] + self.largestMerge(word1, word2[1:])
+        return word1 + word2
+
+# 1755. Closest Subsequence Sum
+
+# 1758. Minimum Changes To Make Alternating Binary String
+
+# 1759. Count Number of Homogenous Substrings
+
+# 1700. Number of Students Unable to Eat Lunch
+
+# 1701. Average Waiting Time
+'''Solution: Simulation
+When a customer arrives, if the arrival time is greater than current, 
+then advance the clock to arrival time. 
+Advance the clock by cooking time. Waiting time = current time - arrival time.
+
+Time complexity: O(n)
+Space complexity: O(1)'''
+class Solution:
+    def averageWaitingTime(self, customers: List[List[int]]) -> float:
+        cur = 0
+        waiting = 0
+        for arrival, time in customers:
+          cur = max(cur, arrival) + time
+          waiting += cur - arrival
+        return waiting / len(customers)
+
+# 1702. Maximum Binary String After Change
+'''Solution with Explanation
+121
+lee215's avatar
+lee215
+168265
+Last Edit: January 8, 2021 2:33 PM
+
+4.8K VIEWS
+
+Explanation
+We don't need touch the starting 1s, they are already good.
+
+For the rest part,
+we continually take operation 2,
+making the string like 00...00011...11
+
+Then we continually take operation 1,
+making the string like 11...11011...11.
+
+
+Complexity
+Time O(n)
+Space O(n)'''
+class Solution(object):
+    def maximumBinaryString(self, binary):
+        """
+        :type binary: str
+        :rtype: str
+        """
+        if '0' not in binary: return binary
+        k, n = binary.count('1', binary.find('0')), len(binary)
+        return '1' * (n - k - 1) + '0' + '1' * k
+
+# 1703. Minimum Adjacent Swaps for K Consecutive Ones
+'''Solution: Prefix Sum + Sliding Window
+Time complexity: O(n)
+Space complexity: O(n)
+
+We only care positions of 1s, we can move one element from position x to y 
+(assuming x + 1 ~ y are all zeros) in y - x steps. 
+e.g. [0 0 1 0 0 0 1] => [0 0 0 0 0 1 1], 
+move first 1 at position 2 to position 5, cost is 5 - 2 = 3.
+
+Given a size k window of indices of ones, 
+the optimal solution it to use the median number as center. 
+We can compute the cost to form consecutive numbers:
+
+e.g. [1 4 7 9 10] => [5 6 7 8 9] cost = (5 - 1) + (6 - 4) + (9 - 8) + (10 - 9) = 8
+
+However, naive solution takes O(n*k) => TLE.
+
+We can use prefix sum to compute the cost of a window in O(1) to 
+reduce time complexity to O(n)
+
+First, in order to use sliding window, 
+we change the target of every number in the window to the median number.
+e.g. [1 4 7 9 10] => [7 7 7 7 7] cost = (7 – 1) + (7 – 4) + (7 – 7) + (9 – 7) + (10 – 7) = (9 + 10) – (1 + 4) = right – left.
+[5 6 7 8 9] => [7 7 7 7 7] takes extra 2 + 1 + 1 + 2 = 6 steps = (k / 2) * ((k + 1) / 2), 
+these extra steps should be deducted from the final answer.'''
+class Solution(object):
+    def minMoves(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: int
+        """
+        ans = 1e10
+        s = [0]    
+        for i, v in enumerate(nums):
+          if v: s.append(s[-1] + i)
+        n = len(s)
+        m1 = k # 2
+        m2 = (k + 1) # 2
+        for i in range(n - k):
+          right = s[i + k] - s[i + m1]
+          left = s[i + m2] - s[i]
+          ans = min(ans, right - left)
+        return ans - m1 * m2
+
+# 1704. Determine if String Halves Are Alike
+'''Solution: Counting
+Time complexity: O(n)
+Space complexity: O(1)'''
+class Solution:
+    def halvesAreAlike(self, s: str) -> bool:
+        def count(s: str) -> int:
+            return sum(c in 'aeiouAEIOU' for c in s)
+        n = len(s)
+        return count(s[:n#2]) == count(s[n#2:])
+
+# 1705. Maximum Number of Eaten Apples
+
+# 1711. Count Good Meals
+class Solution(object):
+    def countPairs(self, deliciousness):
+        """
+        :type deliciousness: List[int]
+        :rtype: int
+        """
+        sums = [1<<i for i in range(22)]
+        m = defaultdict(int)
+        ans = 0
+        for x in deliciousness:
+          for t in sums:
+            if t - x in m: ans += m[t - x]
+          m[x] += 1
+        return ans % (10**9 + 7)
+
+# 1710. Maximum Units on a Truck
+
+# 1716. Calculate Money in Leetcode Bank
+
+# 1717. Maximum Score From Removing Substrings
+
+# 1718. Construct the Lexicographically Largest Valid Sequence
+class Solution(object):
+    def constructDistancedSequence(self, n):
+        """
+        :type n: int
+        :rtype: List[int]
+        """
+        l = n * 2 - 1
+        ans = [0] * l
+        def dfs(i, s):
+          if i == l: return True
+          if ans[i]: return dfs(i + 1, s)
+          for d in range(n, 0, -1):
+            j = i + (0 if d == 1 else d)
+            if s & (1 << d) or j >= l or ans[j]: continue
+            ans[i] = ans[j] = d
+            if dfs(i + 1, s | (1 << d)): return True
+            ans[i] = ans[j] = 0
+          return False
+        dfs(0, 0)
+        return ans
+
+# 1719. Number Of Ways To Reconstruct A Tree
+
+# 1720. Decode XORed Array
+'''Solution: Bitset
+Time complexity: O(E*V)
+Space complexity: O(V^2)'''
+
+# 1721. Swapping Nodes in a Linked List
+
+# 1722. Minimize Hamming Distance After Swap Operations
+
+# 1723. Find Minimum Time to Finish All Jobs
+'''Solution 2: Bianry search
+The problem of the first solution,
+is that the upper bound reduce not quick enough.
+Apply binary search, to reduce the upper bound more quickly.'''
+class Solution(object):
+    def minimumTimeRequired(self, A, k):
+        """
+        :type jobs: List[int]
+        :type k: int
+        :rtype: int
+        """
+        n = len(A)
+        A.sort(reverse=True) # opt 1
+
+        def dfs(i):
+            if i == n: return True # opt 3
+            for j in xrange(k):
+                if cap[j] >= A[i]:
+                    cap[j] -= A[i]
+                    if dfs(i + 1): return True
+                    cap[j] += A[i]
+                if cap[j] == x: break # opt 2
+            return False
+
+        # binary search
+        left, right = max(A), sum(A)
+        while left < right:
+            x = (left + right) / 2
+            cap = [x] * k
+            if dfs(0):
+                right = x
+            else:
+                left = x + 1
+        return left
+
+# 1725. Number Of Rectangles That Can Form The Largest Square
+
+# 1726. Tuple with Same Product
+
+# 1691. Maximum Height by Stacking Cuboids
+'''
+DP, Prove with Explanation
+
+Intuition
+There is something midleading here, you need to understand the differnece.
+If the question is:
+"You can place cuboid i on cuboid j if width[i] <= width[j] 
+and length[i] <= length[j]"
+that's will be difficult.
+
+But it's
+"You can place cuboid i on cuboid j if width[i] <= width[j] 
+and length[i] <= length[j] and height[i] <= height[j]"
+That's much easier.
+
+
+Explanation
+You can rearrange any cuboid's dimensions by rotating it to put it on another cuboid.
+So for each cuboid, we sort its length in three dimension.
+
+You can place cuboid i on cuboid j,
+we have
+width[i] <= width[j] and length[i] <= length[j] and height[i] <= height[j].
+
+This condition will hold, after we sort each cuboid length,
+that is,
+small[i] <= small[j] and mid[i] <= mid[j] and big[i] <= big[j].
+
+We apply a brute for doulbe for loop,
+to compare each pair of cuboids,
+check if they satifify the condition samll[i] <= small[j] 
+and mid[i] <= mid[j] and big[i] <= big[j]
+If so, we can place cuboid i on cuboid j.
+
+You may concern whether area[i] <= area[j].
+Don't worry, we always put the big[i] as the height,
+the area (width,length) = (small[i], mid[j]),
+and we have checked samll[i] <= small[j] && mid[i] <= mid[j].
+
+
+Complexity
+Time O(n^2)
+Space O(n)'''
+class Solution(object):
+    def maxHeight(self, cuboids):
+        """
+        :type cuboids: List[List[int]]
+        :rtype: int
+        """
+        cuboids = [[0, 0, 0]] + sorted(map(sorted,cuboids))
+        dp = [0] * len(cuboids)
+        for j in xrange(1, len(cuboids)):
+            for i in xrange(j):
+                if all(cuboids[i][k] <= cuboids[j][k] for k in xrange(3)):
+                    dp[j] = max(dp[j], dp[i] + cuboids[j][2])
+        return max(dp)
+
+# 1690. Stone Game VII
+'''Solution: MinMax + DP
+
+For a sub game of stones[l~r] game(l, r), we have two choices:
+Remove the left one: sum(stones[l + 1 ~ r]) – game(l + 1, r)
+Remove the right one: sum(stones[l ~ r – 1]) – game(l, r – 1)
+And take the best choice.
+
+Time complexity: O(n^2)
+Space complexity: O(n^2)'''
+class Solution(object):
+    def stoneGameVII(self, stones):
+        """
+        :type stones: List[int]
+        :rtype: int
+        """
+        n = len(stones)
+        s = [0] * (n + 1)
+        for i in range(n): s[i + 1] = s[i] + stones[i]
+        dp = [[0] * n for _ in range(n)]
+        for c in range(2, n + 1):
+          for l in range(0, n - c + 1):
+            r = l + c - 1
+            dp[l][r] = max(s[r + 1] - s[l + 1] - dp[l + 1][r],
+                           s[r] - s[l] - dp[l][r - 1])
+        return dp[0][n - 1]
+
+# 1689. Partitioning Into Minimum Number Of Deci-Binary Numbers 
+class Solution(object):
+    def minPartitions(self, n):
+        """
+        :type n: str
+        :rtype: int
+        """
+        return int(max(n))
+
+# 1679. Max Number of K-Sum Pairs
+class Solution(object):
+    def maxOperations(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: int
+        """
+        m = defaultdict(int)
+        ans = 0
+        for x in nums: m[x] += 1
+        for x in nums:
+          if m[x] < 1 or m[k - x] < 1 + (x + x == k): continue
+          m[x] -= 1
+          m[k - x] -= 1
+          ans += 1
+        return ans
+        
+# 1680. Concatenation of Consecutive Binary Numbers
+
+# 1681. Minimum Incompatibility
+
+# 1684. Count the Number of Consistent Strings
+class Solution(object):
+    def countConsistentStrings(self, allowed, words):
+        """
+        :type allowed: str
+        :type words: List[str]
+        :rtype: int
+        """
+        return sum(all(c in allowed for c in w) for w in words)
+
+# 1685. Sum of Absolute Differences in a Sorted Array
+
+# 1675. Minimize Deviation in Array
+'''Explanation
+For each a in A,
+divide a by 2 until it is an odd.
+Push divided a and its original value in to the pq.
+
+The current max value in pq is noted as ma.
+We iterate from the smallest value in pq,
+Update res = min(res, ma - a),
+then we check we can get a * 2.
+
+If a is an odd, we can get a * 2,
+If a < a0, which is its original value, we can also get a*2.
+
+If we can, we push [a*2,a0] back to the pq and continue this process.
+
+
+Complexity
+Time O(nlogn)
+Space O(n)
+
+
+Solution 1: Use Priority Queue'''
+class Solution(object):
+    def minimumDeviation(self, A):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        pq = []
+        for a in A:
+            heapq.heappush(pq, [a / (a & -a), a])
+        res = float('inf')
+        ma = max(a for a, a0 in pq)
+        while len(pq) == len(A):
+            a, a0 = heapq.heappop(pq)
+            res = min(res, ma - a)
+            if a % 2 == 1 or a < a0:
+                ma = max(ma, a * 2)
+                heapq.heappush(pq, [a * 2, a0])
+        return res
+
+# 1673. Find the Most Competitive Subsequence
+'''Solution: Stack
+Use a stack to track the best solution so far, 
+pop if the current number is less than the top of the stack and 
+there are sufficient numbers left. 
+Then push the current number to the stack if not full.
+
+Time complexity: O(n)
+Space complexity: O(k)'''
+class Solution(object):
+    def mostCompetitive(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: List[int]
+        """
+        ans = [None] * k
+        n = len(nums)
+        c = 0
+        for i, x in enumerate(nums):
+          while c and ans[c - 1] > x and c + n - i - 1 >= k:
+            c -= 1
+          if c < k: 
+            ans[c] = x
+            c += 1
+        return ans
+
+# 1663. Smallest String With A Given Numeric Value
+'''Solution: Greedy, Fill in reverse order
+Fill the entire string with 'a', k-=n, 
+then fill in reverse order, replace 'a' with 'z' until not enough k left.
+
+Time complexity: O(n)
+Space complexity: O(n)'''
+class Solution:
+    def getSmallestString(self, n: int, k: int) -> str:
+        ans = ['a'] * n
+        k -= n
+        i = n - 1
+        while k:
+          d = min(k, 25)
+          ans[i] = chr(ord(ans[i]) + d)
+          k -= d
+          i -= 1
+        return ''.join(ans)
+
+# 1656. Design an Ordered Stream
+'''Solution: Straight Forward
+Time complexity: O(n) in total
+Space complexity: O(n)
+
+'''
+class OrderedStream:
+
+    def __init__(self, n: int):
+        self.data = [None] * (n + 1)
+        self.ptr = 1
+
+    def insert(self, idKey: int, value: str) -> List[str]:
+        self.data[idKey] = value
+        if idKey == self.ptr:
+          while self.ptr < len(self.data) and self.data[self.ptr]:
+            self.ptr += 1
+          return self.data[idKey:self.ptr]
+        return []
+
+# 1657. Determine if Two Strings Are Close
+'''Solution: Hashtable
+Two strings are close:
+1. Have the same length, ccabbb => 6 == aabccc => 6
+2. Have the same char set, ccabbb => (a, b, c) == aabccc => (a, b, c)
+3. Have the same sorted char counts ccabbb => (1, 2, 3) == aabccc => (1, 2, 3)
+
+Time complexity: O(n)
+Space complexity: O(1)'''
+class Solution:
+    def closeStrings(self, word1: str, word2: str) -> bool:
+        c1, c2 = Counter(word1), Counter(word2)
+        return all([len(word1) == len(word2), 
+                    c1.keys() == c2.keys(),
+                    sorted(c1.values()) == sorted(c2.values())])
+
+# 1627. Graph Connectivity With Threshold
+'''Solution: Union Find
+For x, merge 2x, 3x, 4x, ..,
+If a number is already “merged”, skip it.
+
+Time complexity: O(nlogn? + queries)?
+Space complexity: O(n)'''
+class Solution:
+    def areConnected(self, n: int, threshold: int, queries: List[List[int]]) -> List[bool]:
+        if threshold == 0: return [True] * len(queries)
+    
+        ds = list(range(n + 1))
+        def find(x: int) -> int:
+          if x != ds[x]: ds[x] = find(ds[x])
+          return ds[x]
+
+        for x in range(threshold + 1, n + 1):
+          if ds[x] == x:
+            for y in range(2 * x, n + 1, x):
+              ds[max(find(x), find(y))] = min(find(x), find(y))
+
+        return [find(x) == find(y) for x, y in queries]
+
+# 1616. Split Two Strings to Make Palindrome
+'''Greedy Solution, O(1) Space
+
+Explanation
+Greedily take the a_suffix and b_prefix as long as they are palindrome,
+that is, a_suffix = reversed(b_prefix).
+
+The the middle part of a is s1,
+The the middle part of b is s2.
+
+If either s1 or s2 is palindrome, then return true.
+
+Then we do the same thing for b_suffix and a_prefix
+
+
+Solution 1:
+Time O(N), Space O(N)'''
+class Solution(object):
+    def checkPalindromeFormation(self, a, b):
+        """
+        :type a: str
+        :type b: str
+        :rtype: bool
+        """
+        i, j = 0, len(a) - 1
+        while i < j and a[i] == b[j]:
+            i, j = i + 1, j - 1
+        s1, s2 = a[i:j + 1], b[i:j + 1]
+
+        i, j = 0, len(a) - 1
+        while i < j and b[i] == a[j]:
+            i, j = i + 1, j - 1
+        s3, s4 = a[i:j + 1], b[i:j + 1]
+
+        return any(s == s[::-1] for s in (s1,s2,s3,s4))
+
+#  1609. Even Odd Tree
+'''Solution 2: BFS
+Time complexity: O(n)
+Space complexity: O(n)'''
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def isEvenOddTree(self, root: Optional[TreeNode]) -> bool:
+        q = collections.deque([root])
+        odd = 1
+        while q:
+          prev = 0 if odd else 10**7
+          for _ in range(len(q)):
+            root = q.popleft()
+            if not root: continue
+            comp = int.__le__ if odd else int.__ge__        
+            if root.val % 2 != odd or comp(root.val, prev): return False        
+            prev = root.val
+            q += (root.left, root.right)        
+          odd = 1 - odd
+        return True
+
+'''Solution 1: DFS
+Time complexity: O(n)
+Space complexity: O(n)'''
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def isEvenOddTree(self, root: Optional[TreeNode]) -> bool:
+        vals = {}
+        def dfs(root: TreeNode, d: int) -> bool:
+          if not root: return True
+          if d not in vals: vals[d] = 0 if d % 2 == 0 else 10**7
+          comp = int.__ge__ if d % 2 else int.__le__      
+          if root.val % 2 == d % 2 or comp(root.val, vals[d]): return False      
+          vals[d] = root.val
+          return dfs(root.left, d + 1) and dfs(root.right, d + 1)
+        return dfs(root, 0)
+
+# 1600. Throne Inheritance
+'''Solution: HashTable + DFS
+Record :
+1. mapping from parent to children (ordered)
+2. who has dead
+
+Time complexity: getInheritanceOrder O(n), other O(1)
+Space complexity: O(n)'''
+class ThroneInheritance:
+
+    def __init__(self, kingName: str):
+        self.kingName = kingName
+        self.family = defaultdict(list)    
+        self.dead = set()
+
+    def birth(self, parentName: str, childName: str) -> None:
+        self.family[parentName].append(childName)
+
+    def death(self, name: str) -> None:
+        self.dead.add(name)
+
+    def getInheritanceOrder(self) -> List[str]:
+        order = []
+        def dfs(name: str):
+          if name not in self.dead: order.append(name)
+          for child in self.family[name]: dfs(child)
+        dfs(self.kingName)
+        return order
+
+
+# Your ThroneInheritance object will be instantiated and called as such:
+# obj = ThroneInheritance(kingName)
+# obj.birth(parentName,childName)
+# obj.death(name)
+# param_3 = obj.getInheritanceOrder()
+
+# 1601. Maximum Number of Achievable Transfer Requests
+'''Solution: Combination
+Try all combinations: O(2^n * (r + n))
+Space complexity: O(n)'''
+class Solution:
+    def maximumRequests(self, n: int, requests: List[List[int]]) -> int:
+        r = len(requests)
+        ans = 0
+        for s in range(1 << r):
+          degrees = [0] * n
+          for i in range(r):
+            if s & (1 << i):
+              degrees[requests[i][0]] -= 1
+              degrees[requests[i][1]] += 1
+          if not any(degrees):
+            ans = max(ans, bin(s).count('1'))
+        return ans
+
+'''Check All Combinations
+
+Intuition
+We can brute forces all combinations of requests,
+and then check if it's achievable.
+
+
+Explanation
+For each combination, use a mask to present the picks.
+The kth bits means we need to satisfy the kth request.
+
+If for all buildings, in degrees == out degrees,
+it's achievable.
+
+
+Complexity
+Time O((N + R) * 2^R)
+Space O(N)
+
+
+Solution 1'''
+class Solution(object):
+    def maximumRequests(self, n, requests):
+        """
+        :type n: int
+        :type requests: List[List[int]]
+        :rtype: int
+        """
+        nr = len(requests)
+        res = 0
+
+        def test(mask):
+            outd = [0] * n
+            ind = [0] * n
+            for k in xrange(nr):
+                if (1 << k) & mask:
+                    outd[requests[k][0]] += 1
+                    ind[requests[k][1]] += 1
+            return sum(outd) if outd == ind else 0
+
+        for i in xrange(1 << nr):
+            res = max(res, test(i))
+        return res
+# Solution 2: Using Combination
+class Solution(object):
+    def maximumRequests(self, n, requests):
+        """
+        :type n: int
+        :type requests: List[List[int]]
+        :rtype: int
+        """
+        for k in range(len(requests), 0, -1):
+            for c in itertools.combinations(range(len(requests)), k):
+                degree = [0] * n
+                for i in c:
+                    degree[requests[i][0]] -= 1
+                    degree[requests[i][1]] += 1
+                if not any(degree):
+                    return k
+        return 0
+# Solution 3: Using Counter
+class Solution:
+    def maximumRequests(self, n: int, requests: List[List[int]]) -> int:
+        for k in range(len(requests), 0, -1):
+            for c in combinations(requests, k):
+                if Counter(a for a, b in c) == Counter(b for a, b in c):
+                    return k
+        return 0     
+# 1604. Alert Using Same Key-Card Three or More Times in a One Hour Period
+
+# 1605. Find Valid Matrix Given Row and Column Sums
+
+# 1593. Split a String Into the Max Number of Unique Substrings
+
+# 1594. Maximum Non Negative Product in a Matrix
+
+# 1595. Minimum Cost to Connect Two Groups of Points
+
+# 1598. Crawler Log Folder
+
+# 1599. Maximum Profit of Operating a Centennial Wheel
+
+# 1589. Maximum Sum Obtained of Any Permutation
+
+# 1590. Make Sum Divisible by P
+'''Solution: HashTable + Prefix Sum
+Very similar to subarray target sum.
+
+Basically, we are trying to find a shortest subarray 
+that has sum % p equals to r = sum(arr) % p.
+
+We use a hashtable to store the last index of the prefix sum % p 
+and check whether (prefix_sum + p – r) % p exists or not.
+
+Time complexity: O(n)
+Space complexity: O(n)'''
+class Solution:
+    def minSubarray(self, nums: List[int], p: int) -> int:
+        r = sum(nums) % p
+        if r == 0: return 0
+        m = {0: -1}
+        ans = len(nums)
+        s = 0
+        for i, x in enumerate(nums):
+          s = (s + x) % p
+          t = (s + p - r) % p
+          if t in m:
+            ans = min(ans, i - m[t])
+          m[s] = i
+        return -1 if ans == len(nums) else ans
+
+# 1591. Strange Printer II
+''' Straight Forward
+
+Explanation
+For each color, find its edge most index.
+Then we need to paint this color from [top, left] to [bottom, right].
+
+If in the rectangle, all the colors are either the same or 0,
+we mark all of them to 0.
+
+If we can mark the whole grid to 0, it means the target if printable.
+
+
+Complexity
+Time O(CCMN)
+Space O(4N)'''
+class Solution(object):
+    def isPrintable(self, A):
+        """
+        :type targetGrid: List[List[int]]
+        :rtype: bool
+        """
+        m, n = len(A), len(A[0])
+        pos = [[m, n, 0, 0] for i in xrange(61)]
+        colors = set()
+        for i in xrange(m):
+            for j in xrange(n):
+                c = A[i][j]
+                colors.add(c)
+                pos[c][0] = min(pos[c][0], i)
+                pos[c][1] = min(pos[c][1], j)
+                pos[c][2] = max(pos[c][2], i)
+                pos[c][3] = max(pos[c][3], j)
+
+        def test(c):
+            for i in xrange(pos[c][0], pos[c][2] + 1):
+                for j in xrange(pos[c][1], pos[c][3] + 1):
+                    if A[i][j] > 0 and A[i][j] != c:
+                        return False
+            for i in xrange(pos[c][0], pos[c][2] + 1):
+                for j in xrange(pos[c][1], pos[c][3] + 1):
+                    A[i][j] = 0
+            return True
+
+        while colors:
+            colors2 = set()
+            for c in colors:
+                if not test(c):
+                    colors2.add(c)
+            if len(colors2) == len(colors):
+                return False
+            colors = colors2
+        return True
+
+# 1592. Rearrange Spaces Between Words
+
+# 1579. Remove Max Number of Edges to Keep Graph Fully Traversable
+'''Solution: Greedy + Spanning Tree / Union Find
+Use type 3 (both) edges first.
+
+Time complexity: O(E)
+Space complexity: O(n)'''
+class DSU:
+  def __init__(self, n: int):
+    self.p = list(range(n))
+    self.e = 0
+    
+  def find(self, x: int) -> int:
+    if x != self.p[x]: self.p[x] = self.find(self.p[x])
+    return self.p[x]
+  
+  def merge(self, x: int, y: int) -> int:
+    rx, ry = self.find(x), self.find(y)
+    if rx == ry: return 1
+    self.p[rx] = ry
+    self.e += 1
+    return 0
+  
+class Solution:
+    def maxNumEdgesToRemove(self, n: int, edges: List[List[int]]) -> int:
+        A, B = DSU(n + 1), DSU(n + 1)    
+        ans = 0
+        for t, x, y in edges:
+          if t != 3: continue
+          ans += A.merge(x, y)
+          B.merge(x, y)
+        for t, x, y in edges:
+          if t == 3: continue
+          d = A if t == 1 else B
+          ans += d.merge(x, y)
+        return ans if A.e == B.e == n - 1 else -1
+
+# 1582. Special Positions in a Binary Matrix
+
+# 1583. Count Unhappy Friends
+
+# 1584. Min Cost to Connect All Points
+
+# 1585. Check If String Is Transformable With Substring Sort Operations
+'''Solution: Queue
+
+We can move a smaller digit from right to left by sorting two adjacent digits.
+e.g. 18572 -> 18527 -> 18257 -> 12857, 
+but we can not move a larger to the left of a smaller one.
+
+Thus, for each digit in the target string, 
+we find the first occurrence of it in s, 
+and try to move it to the front by checking if there is any smaller one in front of it.
+
+Time complexity: O(n)
+Space complexity: O(n)
+'''
+class Solution:
+    def isTransformable(self, s: str, t: str) -> bool:
+        idx = defaultdict(deque)
+        for i, c in enumerate(s):
+          idx[int(c)].append(i)
+        for c in t:
+          d = int(c)
+          if not idx[d]: return False
+          for i in range(d):
+            if idx[i] and idx[i][0] < idx[d][0]: return False
+          idx[d].popleft()
+        return True
+
+# 1575. Count All Possible Routes
+'''Solution: DP
+dp[j][f] := # of ways to start from city ‘start’ to reach city ‘j’ with fuel level f.
+
+dp[j][f] = sum(dp[i][f + d]) d = dist(i, j)
+
+init: dp[start][fuel] = 1
+
+Time complexity: O(n^2*fuel)
+Space complexity: O(n*fuel)
+
+'''
+class Solution:
+    def countRoutes(self, locations: List[int], start: int, finish: int, fuel: int) -> int:
+        @lru_cache(None)
+        def dp(i, f): # ways to reach |finsh| from |i| with |f| fuel.
+          if f < 0: return 0
+          return (sum(dp(j, f - abs(locations[i] - locations[j])) 
+                     for j in range(len(locations)) if i != j) + (i == finish)) % (10**9 + 7)
+        return dp(start, fuel)
+        
+# 1576. Replace All ?'s to Avoid Consecutive Repeating Characters
+
+# 1577. Number of Ways Where Square of Number Is Equal to Product of Two Numbers
+
+# 1578. Minimum Time to Make Rope Colorful
+'''Solution: Group by group
+For a group of same letters, delete all expect the one with the highest cost.
+
+Time complexity: O(n)
+Space complexity: O(1)'''
+class Solution:
+    def minCost(self, colors: str, neededTime: List[int]) -> int:
+        colors = '*' + colors + '*'
+        neededTime = [0] + neededTime + [0]
+        ans = t = m = 0    
+        for i in range(1, len(colors)):
+          if colors[i] != colors[i - 1]:
+            ans += t - m
+            t = m = 0
+          t += neededTime[i]
+          m = max(m, neededTime[i])
+        return ans
+
+# 1573. Number of Ways to Split a String
+# One pass: Space complexity: O(n)
+class Solution:
+    def numWays(self, s: str) -> int:
+        n = len(s)
+        p = defaultdict(int)
+        c = 0
+        for ch in s:
+          if ch == '1': c += 1
+          p[c] += 1
+        if c % 3 != 0: return 0
+        if c == 0: return ((n - 1) * (n - 2) # 2) % (10**9 + 7)
+        return (p[c # 3] * p[c # 3 * 2]) % (10**9 + 7)
+'''Solution: Counting
+
+Count how many ones in the binary string as T, if not a factor of 3, 
+then there is no answer.
+
+Count how many positions that have prefix sum of T/3 as l, 
+and how many positions that have prefix sum of T/3*2 as r.
+
+Ans = l * r
+
+But we need to special handle the all zero cases, 
+which equals to C(n-2, 2) = (n – 1) * (n – 2) / 2
+
+Time complexity: O(n)
+Space complexity: O(1)'''
+
+class Solution:
+    def numWays(self, s: str) -> int:
+        n = len(s)
+        t = s.count('1')
+        if t % 3 != 0: return 0
+        if t == 0: return ((n - 1) * (n - 2) # 2) % (10**9 + 7)
+        t #= 3
+        l, r, c = 0, 0, 0
+        for i, ch in enumerate(s):
+          if ch == '1': c += 1
+          if c == t: l += 1
+          elif c == t * 2: r += 1
+        return (l * r) % (10**9 + 7) 
+
+# 1569. Number of Ways to Reorder Array to Get Same BST
+'''Solution: Recursion + Combinatorics
+
+For a given root (first element of the array), 
+we can split the array into left children (nums[i] < nums[0]) 
+and right children (nums[i] > nums[0]). 
+Assuming there are l nodes for the left and r nodes for the right. 
+We have C(l + r, l) different ways to insert l elements into a (l + r) sized array. 
+Within node l / r nodes, we have ways(left) / ways(right) different ways to 
+re-arrange those nodes. 
+So the total # of ways is:
+C(l + r, l) * ways(l) * ways(r)
+Don’t forget to minus one for the final answer.
+
+Time complexity: O(n^2)
+Space complexity: O(n^2)
+
+'''
+class Solution:
+    def numOfWays(self, nums: List[int]) -> int:
+        def ways(nums):
+          if len(nums) <= 2: return 1
+          l = [x for x in nums if x < nums[0]]
+          r = [x for x in nums if x > nums[0]]
+          return comb(len(l) + len(r), len(l)) * ways(l) * ways(r)
+        return (ways(nums) - 1) % (10**9 + 7)
+
+# 1560. Most Visited Sector in a Circular Track
+
+# 1561. Maximum Number of Coins You Can Get
+
+# 1563. Stone Game V
+
+# 1566. Detect Pattern of Length M Repeated K or More Times
+
+# 1553. Minimum Number of Days to Eat N Oranges
+'''Solution: Greedy + DP
+
+Eat oranges one by one to make it a multiply of 2 or 3 
+such that we can eat 50% or 66.66…% of the oranges in one step.
+dp(n) := min steps to finish n oranges.
+base case n <= 1, dp(n) = n
+transition: dp(n) = 1 + min(n%2 + dp(n/2), n % 3 + dp(n / 3))
+e.g. n = 11,
+we eat 11%2 = 1 in one step, left = 10 and then eat 10 / 2 = 5 in another step. 
+5 left for the subproblem.
+we eat 11%3 = 2 in two steps, left = 9 and then eat 9 * 2 / 3 = 6 in another step, 
+3 left for the subproblem.
+dp(11) = 1 + min(1 + dp(5), 2 + dp(3))
+
+T(n) = 2*T(n/2) + O(1) = O(n)
+Time complexity: O(n) # w/o memoization, close to O(logn) in practice.
+Space complexity: O(logn)'''
+class Solution:
+    def minDays(self, n: int) -> int:
+        @lru_cache(None)
+        def dp(n):
+          if n <= 1: return n
+          return 1 + min(n % 2 + dp(n # 2), n % 3 + dp(n # 3))
+        return dp(n)
+
+# 1556. Thousand Separator
+
+# 1558. Minimum Numbers of Function Calls to Make Target Array
+'''Solution: count 1s
+
+
+For 5 (101b), we can add 1s for 5 times which of cause 
+isn’t the best way to generate 5, the optimal way is to [+1, *2, +1]. 
+We have to add 1 for each 1 in the binary format. 
+e.g. 11 (1011), we need 3x “+1” op, and 4 “*2” op. 
+Fortunately, the “*2” can be shared/delayed, 
+thus we just need to find the largest number.
+e.g. [2,4,8,16]
+[0, 0, 0, 0] -> [0, 0, 0, 1] -> [0, 0, 0, 2]
+[0, 0, 0, 2] -> [0, 0, 1, 2] -> [0, 0, 2, 4]
+[0, 0, 2, 4] -> [0, 1, 2, 4] -> [0, 2, 4, 8]
+[0, 2, 4, 8] -> [1, 2, 4, 8] -> [2, 4, 8, 16]
+ans = sum{count_1(arr_i)} + high_bit(max(arr_i))
+
+Time complexity: O(n*log(max(arr_i))
+Space complexity: O(1)'''
+class Solution:
+    def minOperations(self, nums: List[int]) -> int:
+        return sum(bin(x).count('1') for x in nums) + len(bin(max(nums))) - 3
+
+# 1559. Detect Cycles in 2D Grid
+
+# 1546. Maximum Number of Non-Overlapping Subarrays With Sum Equals Target
+ 
+# 1547. Minimum Cost to Cut a Stick
+'''Solution: Range DP
+dp[i][j] := min cost to finish the i-th cuts to the j-th (in sorted order)
+dp[i][j] = r – l + min(dp[i][k – 1], dp[k + 1][j]) 
+# [l, r] is the current stick range.
+
+Time complexity: O(n^3)
+Space complexity: O(n^2)'''
+class Solution:
+    def minCost(self, n: int, cuts: List[int]) -> int:
+        @lru_cache(maxsize=None)
+        def dp(i, j, l, r):
+          if i > j: return 0
+          if i == j: return r - l
+          return r - l + min(dp(i, k - 1, l, cuts[k])
+                           + dp(k + 1, j, cuts[k], r) 
+                             for k in range(i, j + 1))
+        cuts.sort()
+        return dp(0, len(cuts) - 1, 0, n)
+
+# 1550. Three Consecutive Odds
+ 
+# 1551. Minimum Operations to Make Array Equal
+
+# 1545. Find Kth Bit in Nth Binary String
+'''Solution 2: Recursion
+All the strings have odd length of L = (1 << n) – 1,
+Let say the center m = (L + 1) / 2
+if n == 1, k should be 1 and ans is “0”.
+Otherwise
+if k == m, we know it’s “1”.
+if k < m, the answer is the same as find(n-1, K)
+if k > m, we are finding a flipped and mirror char in S(n-1), 
+thus the answer is flip(find(n-1, L – k + 1)).
+
+Time complexity: O(n)
+Space complexity: O(n)'''
+class Solution:
+    def findKthBit(self, n: int, k: int) -> str:
+        if n == 1: return "0"
+        l = (1 << n) - 1    
+        if k == (l + 1) / 2:
+          return "1"
+        elif k < (l + 1) / 2:
+          return self.findKthBit(n - 1, k)
+        else:
+          return str(1 - int(self.findKthBit(n - 1, l - k + 1)))
+
+# 1544. Make The String Great
+'''Solution: Stack
+Iterator over the string, compare current char with top of the stack, 
+if they are a bad pair, pop the stack (remove both of them).
+Otherwise, push the current char onto the stack.
+
+input: “abBAcC”
+“a”
+“ab”
+“abB” -> “a”
+“aA” -> “”
+“c”
+“cC” -> “”
+ans = “”
+
+Time complexity: O(n)
+Space complexity: O(n)
+
+'''
+class Solution:
+    def makeGood(self, s: str) -> str:
+        ans = []
+        for c in s:
+          if ans and abs(ord(ans[-1]) - ord(c)) == 32:
+            ans.pop()
+          else:
+            ans.append(c)
+        return "".join(ans)
+
+# 1542. Find Longest Awesome Substring
+'''Solution: Prefix mask + Hashtable
+
+
+For a palindrome all digits must occurred even times expect one. 
+We can use a 10 bit mask to track the occurrence of each digit for prefix s[0~i]. 
+0 is even, 1 is odd.
+
+We use a hashtable to track the first index of each prefix state.
+If s[0~i] and s[0~j] have the same state 
+which means every digits in s[i+1~j] occurred even times (zero is also even) 
+and it’s an awesome string. 
+Then (j – (i+1) + 1) = j – i is the length of the palindrome. So far so good.
+
+But we still need to consider the case when there is a digit with odd occurrence. 
+We can enumerate all possible ones from 0 to 9, 
+and temporarily flip the bit of the digit and see whether that state happened before.
+
+fisrt_index[0] = -1, first_index[*] = inf
+ans = max(ans, j – first_index[mask])
+
+Time complexity: O(n)
+Space complexity: O(2^10) = O(1)'''
+class Solution:
+    def longestAwesome(self, s: str) -> int:
+        idx = [-1] + [len(s)] * 1023
+        ans, mask = 0, 0
+        for i, c in enumerate(s):
+          mask ^= 1 << (ord(c) - ord('0'))
+          ans = max([ans, i - idx[mask]]
+                    + [i - idx[mask ^ (1 << j)] for j in range(10)])
+          idx[mask] = min(idx[mask], i)
+        return ans
+
+# 1541. Minimum Insertions to Balance a Parentheses String
+
+# 1540. Can Convert String in K Moves
+
+# 1503. Last Moment Before All Ants Fall Out of a Plank
+'''Solution: Keep Walking
+When two ants A –> and <– B meet at some point, 
+they change directions <– A B –>, 
+we can swap the ids of the ants as <– B A–>, 
+so it’s the same as walking individually and passed by. 
+Then we just need to find the max/min of the left/right arrays.
+
+Time complexity: O(n)
+Space complexity: O(1)'''
+class Solution:
+    def getLastMoment(self, n: int, left: List[int], right: List[int]) -> int:
+        t1 = max(left) if left else 0
+        t2 = n - min(right) if right else 0
+        return max(t1, t2)
+
+# 1504. Count Submatrices With All Ones
+
+# 1505. Minimum Possible Integer After at Most K Adjacent Swaps On Digits
+'''Solution 2: Binary Indexed Tree / Fenwick Tree
+
+Moving elements in a string is a very expensive operation, 
+basically O(n) per op. Actually, we don’t need to move the elements physically, 
+instead we track how many elements before i has been moved to the “front”. 
+Thus we know the cost to move the i-th element to the “front”, 
+which is i – elements_moved_before_i or prefix_sum(0~i-1) 
+if we mark moved element as 1.
+
+We know BIT / Fenwick Tree is good for dynamic prefix sum computation 
+which helps to reduce the time complexity to O(nlogn).
+
+Time complexity: O(nlogn)
+Space complexity: O(n)'''
+class Fenwick:
+  def __init__(self, n):
+    self.sums = [0] * (n + 1)
+  
+  def query(self, i):
+    ans = 0
+    i += 1
+    while i > 0:
+      ans += self.sums[i];
+      i -= i & -i
+    return ans
+  
+  def update(self, i, delta):
+    i += 1
+    while i < len(self.sums):
+      self.sums[i] += delta
+      i += i & -i
+ 
+ 
+class Solution:
+  def minInteger(self, num: str, k: int) -> str:    
+    n = len(num)
+    used = [False] * n
+    pos = [deque() for _ in range(10)]
+    for i, c in enumerate(num):
+      pos[ord(c) - ord("0")].append(i)
+    tree = Fenwick(n)
+    ans = []
+    while k > 0 and len(ans) < n:
+      for d in range(10):
+        if not pos[d]: continue
+        i = pos[d][0]
+        cost = i - tree.query(i - 1)
+        if cost > k: continue
+        k -= cost
+        ans.append(chr(d + ord("0")))
+        tree.update(i, 1)
+        used[i] = True
+        pos[d].popleft()
+        break
+    for i in range(n):
+      if not used[i]: ans.append(num[i])
+    return "".join(ans)
+
+# 1494. Parallel Courses II
+
+# 1496. Path Crossing
+
+# 1497. Check If Array Pairs Are Divisible by k
+
+# 1499. Max Value of Equation
+'''Solution 2: Monotonic Queue
+
+Maintain a monotonic queue:
+1. The queue is sorted by y – x in descending order.
+2. Pop then front element when xj – x_front > k, they can’t be used anymore.
+3. Record the max of {xj + yj + (y_front – x_front)}
+4. Pop the back element when yj – xj > y_back – x_back, 
+they are smaller and lefter. Won’t be useful anymore.
+5. Finally, push the j-th element onto the queue.
+
+Time complexity: O(n)
+Space complexity: O(n)
+
+'''
+class Solution:
+    def findMaxValueOfEquation(self, points: List[List[int]], k: int) -> int:
+        ans = float('-inf')
+        q = deque() # {(y - x, x)}
+        for x, y in points:
+          while q and x - q[0][1] > k: q.popleft()
+          if q: ans = max(ans, x + y + q[0][0])
+          while q and y - x >= q[-1][0]: q.pop()
+          q.append((y - x, x))
+        return ans
+
+# 1489. Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree
+
+# 1492. The kth Factor of n
+
+# 1493. Longest Subarray of 1's After Deleting One Element
+
+# 1487. Making File Names Unique
+
+# 1486. XOR Operation in an Array
+
+# 1481. Least Number of Unique Integers after K Removals
+
+# 1478. Allocate Mailboxes
+'''DP Solution
+
+Explantion
+dp[i] will means that,
+the minimum distance of i + 1 first house.
+
+B[i] = A[0] + A[1] + A[2] + .. + A[i-1]
+cal(i, j) will return the minimum distance,
+between A[i]~A[j] with only one mailbox.
+
+Initialy, when k = 1, dp[i] = cal(0, i)
+when we increment k, we can update dp with one more mailbox added.
+
+Here we brute force the number of houses that new mailbox in charge.
+The brute force here are good enough to get accepted.
+
+
+Explantion for the cost
+What and why is last = (B[j + 1] - B[m2]) - (B[m1 + 1] - B[i + 1]);
+
+All from @caohuicn:
+
+First of all,
+last is to calculate distances for houses [i + 1, j] with 1 mailbox,
+since the dp recurrence relation is:
+dp[j][k] = min(dp[i][k-1] + cal[i + 1, j])
+(second dimension is implicit in the code);
+
+For houses [i + 1, j],
+if the number of houses is odd,
+the only mailbox should always be placed in the middle house.
+If number of house is even, it can be placed anywhere
+between the middle 2 houses.
+
+Let's say we always put it at m1;
+Now let's see the meaning of m1 and m2. For even houses,
+m1 + 1 == m2, for odd houses, m1 == m2.
+The point of introducing 2 variables is to
+make sure number of houses between [i+1, m1] and [m2,j] are always equal.
+(B[j + 1] - B[m2]) means A[m2] + A[m2+1] + ... + A[j],
+(B[m1 + 1] - B[i + 1]) means A[i+1] + A[i+2] + ... + A[m1],
+so last becomes A[j] - A[i+1] + A[j-1] - A[i+2] +... + A[m2] - A[m1].
+
+We can interpret it as:
+if the mailbox is placed between any 2 houses x and y,
+the sum of distances for both houses will be A[y] - A[x].
+Say we have 2n houses, then there will be n pairs;
+if we have 2n + 1 houses, then there will n + 1 pairs.
+Another way to interpret it is:
+if the mailbox is placed at m1,
+for all the right side houses,
+the sum of distances will be
+A[m2]-A[m1] + A[m2+1]-A[m1] + ... + A[j]-A[m1],
+and for the left side (including m1),
+it'll be A[m1]-A[i+1]+A[m1]-A[i+2]+...+A[m1]-A[m1-1] + A[m1]-A[m1].
+
+Adding these 2 things together,
+A[m1]s will be cancelled out,
+since number of houses between [i+1, m1] and [m2,j] are always equal.
+
+Hope it helps.
+
+Complexity
+Time O(KNN)
+Space O(N)
+
+Note that solution O(KN) is also possible to come up with.'''
+class Solution(object):
+    def minDistance(self, A, k):
+        """
+        :type houses: List[int]
+        :type k: int
+        :rtype: int
+        """
+        
+        A.sort()
+        n = len(A)
+        B = [0]
+        for i, a in enumerate(A):
+            B.append(B[i] + a)
+
+        def cal(i, j):
+            m1, m2 = (i + j) / 2, (i + j + 1) / 2
+            return (B[j + 1] - B[m2]) - (B[m1 + 1] - B[i])
+
+        dp = [cal(0, j) for j in xrange(n)]
+        for k in xrange(2, k + 1):
+            for j in xrange(n - 1, k - 2, -1):
+                for i in xrange(k - 2, j):
+                    dp[j] = min(dp[j], dp[i] + cal(i + 1, j))
+        return int(dp[-1])
+
+# 1476. Subrectangle Queries
+
+# 1477. Find Two Non-overlapping Sub-arrays Each With Target Sum
+
+# 1475. Final Prices With a Special Discount in a Shop
+
+# 1537. Get the Maximum Score
+'''Solution: Two Pointers + DP
+Since numbers are strictly increasing, 
+we can always traverse the smaller one using two pointers.
+Traversing ([2,4,5,8,10], [4,6,8,10])
+will be like [2, 4/4, 5, 6, 8, 10/10]
+It two nodes have the same value, we have two choices and pick the larger one, 
+then both move nodes one step forward. 
+Otherwise, the smaller node moves one step forward.
+dp1[i] := max path sum ends with nums1[i-1]
+dp2[j] := max path sum ends with nums2[j-1]
+if nums[i -1] == nums[j – 1]:
+dp1[i] = dp2[j] = max(dp[i-1], dp[j-1]) + nums[i -1]
+i += 1, j += 1
+else if nums[i – 1] < nums[j – 1]:
+dp[i] = dp[i-1] + nums[i -1]
+i += 1
+else if nums[j – 1] < nums[i – 1]:
+dp[j] = dp[j-1] + nums[j -1]
+j += 1
+return max(dp1[-1], dp2[-1])
+
+Time complexity: O(n)
+Space complexity: O(n) -> O(1)'''
+class Solution:
+    def maxSum(self, nums1: List[int], nums2: List[int]) -> int:
+        n1, n2 = len(nums1), len(nums2)
+        i, j = 0, 0
+        a, b = 0, 0
+        while i < n1 or j < n2:
+          if i < n1 and j < n2 and nums1[i] == nums2[j]:
+            a = b = max(a, b) + nums1[i]
+            i += 1
+            j += 1
+          elif i < n1 and (j == n2 or nums1[i] < nums2[j]):
+            a += nums1[i]
+            i += 1
+          else:
+            b += nums2[j]
+            j += 1
+        return max(a, b) % (10**9 + 7)  
+
+# 1536. Minimum Swaps to Arrange a Binary Grid
+
+# 1535. Find the Winner of an Array Game
+class Solution:
+    def getWinner(self, arr: List[int], k: int) -> int:
+        winner = arr[0]
+        win = 0
+        for x in arr[1:]:
+          if x > winner:
+            winner, win = x, 0
+          win += 1
+          if win == k: break
+        return winner
+
+# 1534. Count Good Triplets
+
+# 1528. Shuffle String
+'''Solution: Simulation
+Time complexity: O(n)
+Space complexity: O(n)'''
+class Solution:
+    def restoreString(self, s: str, indices: List[int]) -> str:
+        ans = [None] * len(s)
+        for i, idx in enumerate(indices):
+          ans[idx] = s[i]
+        return ''.join(ans)
+
+# 1530. Number of Good Leaf Nodes Pairs
+
+# 1529. Minimum Suffix Flips
+
+# 1531. String Compression II
+'''State compression
+
+dp[i][k] := min len of s[i:] encoded by deleting at most k charchters.
+
+dp[i][k] = min(dp[i+1][k-1] # delete s[i]
+encode_len(s[i~j] == s[i]) + dp(j+1, k – sum(s[i~j])) for j in range(i, n)) # keep
+
+Time complexity: O(n^2*k)
+Space complexity: O(n*k)'''
+class Solution:
+    def getLengthOfOptimalCompression(self, s: str, k: int) -> int:
+        n = len(s)
+        @functools.lru_cache(maxsize=None)
+        def dp(i, k):
+          if k < 0: return n
+          if i + k >= n: return 0
+          ans = dp(i + 1, k - 1)
+          l = 0
+          same = 0
+          for j in range(i, n):
+            if s[j] == s[i]:
+              same += 1
+              if same <= 2 or same == 10 or same == 100:
+                l += 1
+            diff = j - i + 1 - same
+            if diff < 0: break
+            ans = min(ans, l + dp(j + 1, k - diff))
+          return ans
+        return dp(0, k)
+
+# 1513. Number of Substrings With Only 1s
+'''Solution: DP / Prefix Sum
+dp[i] := # of all 1 subarrays end with s[i].
+dp[i] = dp[i-1] if s[i] == ‘1‘ else 0
+ans = sum(dp)
+s=1101
+dp[0] = 1 // 1
+dp[1] = 2 // 11, *1
+dp[2] = 0 // None
+dp[3] = 1 // ***1
+ans = 1 + 2 + 1 = 5
+
+Time complexity: O(n)
+Space complexity: O(n)
+
+dp[i] only depends on dp[i-1], we can reduce the space complexity to O(1)'''
+class Solution:
+    def numSub(self, s: str) -> int:
+        kMod = 10**9 + 7
+        ans = 0
+        cur = 0
+        for c in s:
+          cur = cur + 1 if c == '1' else 0
+          ans += cur
+        return ans % kMod
+
+# 1521. Find a Value of a Mysterious Function Closest to Target
+
+# 1524. Number of Sub-arrays With Odd Sum
+'''Solution: DP
+
+We would like to know how many subarrays end with arr[i] have odd or even sums.
+
+dp[i][0] := # end with arr[i] has even sum
+dp[i][1] := # end with arr[i] has even sum
+
+if arr[i] is even:
+
+  dp[i][0]=dp[i-1][0] + 1, dp[i][1]=dp[i-1][1]
+
+else:
+
+  dp[i][1]=dp[i-1][0], dp[i][0]=dp[i-1][0] + 1
+
+ans = sum(dp[i][1])
+
+Time complexity: O(n)
+Space complexity: O(n) -> O(1)
+
+'''
+class Solution:
+    def numOfSubarrays(self, arr: List[int]) -> int:
+        ans, odd, even = 0, 0, 0
+        for x in arr:
+          if x & 1:
+            odd, even = even + 1, odd
+          else:
+            odd, even = odd, even + 1
+          ans += odd
+        return ans % int(1e9 + 7)
+
+# 1525. Number of Good Ways to Split a String
+'''Solution: Sliding Window
+Count the frequency of each letter and count number of unique letters 
+for the entire string as right part.
+Iterate over the string, add current letter to the left part, 
+and remove it from the right part.
+We only
+increase the number of unique letters when its frequency becomes to 1
+decrease the number of unique letters when its frequency becomes to 0
+Time complexity: O(n)
+Space complexity: O(1)
+
+'''
+class Solution:
+    def numSplits(self, s: str) -> int:
+        s = [ord(c) - ord('a') for c in s]
+        l, r = [0] * 26, [0] * 26
+        cl, cr, ans = 0, 0, 0
+        for c in s:
+          r[c] += 1
+          if r[c] == 1: cr += 1
+        for c in s:
+          l[c] += 1
+          r[c] -= 1
+          if l[c] == 1: cl += 1
+          if r[c] == 0: cr -= 1
+          if cl == cr: ans += 1
+        return ans
+
+# 1526. Minimum Number of Increments on Subarrays to Form a Target Array
+
+# 1510. Stone Game IV
+'''Solution: Recursion w/ Memoization / DP
+Let win(n) denotes whether the current play will win or not.
+Try all possible square numbers and see whether the other player will lose or not.
+win(n) = any(win(n – i*i) == False) ? True : False
+base case: win(0) = False
+
+Time complexity: O(nsqrt(n))
+Space complexity: O(n)'''
+class Solution:
+    def winnerSquareGame(self, n: int) -> bool:
+        dp = [None] * (n + 1)
+        dp[0] = False
+        for i in range(0, n):      
+          if dp[i]: continue
+          for j in range(1, n + 1):      
+            if i + j * j > n: break
+            dp[i + j * j] = True
+        return dp[n]
+
+# 1518. Water Bottles
+'''Solution: Simulation
+Time complexity: O(logb/loge)?
+Space complexity: O(1)'''
+class Solution:
+    def numWaterBottles(self, numBottles: int, numExchange: int) -> int:
+        ans = numBottles
+        while numBottles >= numExchange:
+            numBottles, remainder = divmod(numBottles, numExchange)
+            ans += numBottles
+            numBottles += remainder
+        return ans
+
+class Solution:
+    def numWaterBottles(self, numBottles: int, numExchange: int) -> int:
+        return numBottles + (numBottles - 1) // (numExchange - 1)
+
+# 1519. Number of Nodes in the Sub-Tree With the Same Label
+'''Solution: Post order traversal + hashtable
+For each label, record the count. 
+When visiting a node, we first record the current count of its label as before, 
+and traverse its children, when done, increment the current count, 
+ans[i] = current – before.
+
+Time complexity: O(n)
+Space complexity: O(n)'''
+class Solution:
+    def countSubTrees(self, n: int, edges: List[List[int]], labels: str) -> List[int]:
+        g = [[] for _ in range(n)]
+        for u, v in edges:
+          g[u].append(v)
+          g[v].append(u)
+        seen = [False] * n
+        count = [0] * 26
+        ans = [0] * n
+        def postOrder(i):
+          if seen[i]: return
+          seen[i] = True
+          before = count[ord(labels[i]) - ord('a')]
+          for j in g[i]: postOrder(j)
+          count[ord(labels[i]) - ord('a')] += 1
+          ans[i] = count[ord(labels[i]) - ord('a')] - before
+        postOrder(0)
+        return ans
+
+# 1520. Maximum Number of Non-Overlapping Substrings
+
+# 1514. Path with Maximum Probability
+'''Solution: Dijkstra’s Algorithm
+max(P1*P2*…*Pn) => max(log(P1*P2…*Pn)) 
+=> max(log(P1) + log(P2) + … + log(Pn) => min(-(log(P1) + log(P2) … + log(Pn)).
+
+Thus we can convert this problem to the classic single source shortest path problem 
+that can be solved with Dijkstra’s algorithm.
+
+Time complexity: O(ElogV)
+Space complexity: O(E+V)'''
+class Solution:
+    def maxProbability(self, n: int, edges: List[List[int]], succProb: List[float], start: int, end: int) -> float:
+        g = [[] for _ in range(n)]
+        for i, e in enumerate(edges):
+          g[e[0]].append((e[1], -math.log(succProb[i])))
+          g[e[1]].append((e[0], -math.log(succProb[i])))
+        seen = [False] * n
+        dist = [float('inf')] * n
+        dist[start] = 0.0
+        q = [(dist[start], start)]
+        while q:
+          _, u = heapq.heappop(q)
+          if seen[u]: continue
+          seen[u] = True
+          if u == end: return math.exp(-dist[u])
+          for v, w in g[u]:
+            if seen[v] or dist[u] + w > dist[v]: continue
+            dist[v] = dist[u] + w        
+            heapq.heappush(q, (dist[v], v))
+        return 0
+
+# 1512. Number of Good Pairs
+'''Solution 2: Hashtable
+Store the frequency of each number so far, when we have a number x at pos j, 
+and it appears k times before. Then we can form additional k pairs.
+
+Time complexity: O(n)
+Space complexity: O(range)'''
+class Solution:
+    def numIdenticalPairs(self, nums: List[int]) -> int:
+        f = defaultdict(int)
+        ans = 0
+        for x in nums:
+          ans += f[x]
+          f[x] += 1
+        return ans
+
+# 1507. Reformat Date
+'''Solution: String + HashTable
+Time complexity: O(1)
+Space complexity: O(1)
+
+'''
+class Solution:
+    def reformatDate(self, date: str) -> str:
+        m = {"Jan": "01", "Feb": "02", "Mar": "03", 
+         "Apr": "04", "May": "05", "Jun": "06", 
+         "Jul": "07", "Aug": "08", "Sep": "09", 
+         "Oct": "10", "Nov": "11", "Dec": "12"}
+        items = date.split(" ")
+        day = items[0][:-2]
+        if len(day) == 1: day = "0" + day
+        return items[2] + "-" + m[items[1]] + "-" + day
+
+# 662. Maximum Width of Binary Tree
+'''Solution: DFS
+
+Let us assign an id to each node, similar to the index of a heap. 
+root is 1, left child = parent * 2, right child = parent * 2 + 1. 
+Width = id(right most child) – id(left most child) + 1, so far so good.
+However, this kind of id system grows exponentially, 
+it overflows even with long type with just 64 levels. 
+To avoid that, we can remap the id with id – id(left most child of each level).
+
+Time complexity: O(n)
+Space complexity: O(h)
+
+'''
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def widthOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+        ids = []
+        def dfs(node: TreeNode, d: int, id: int) -> int:
+          if not node: return 0
+          if d == len(ids): ids.append(id)
+          return max(id - ids[d] + 1, 
+                     dfs(node.left, d + 1, (id - ids[d]) * 2),
+                     dfs(node.right, d + 1, (id - ids[d]) * 2 + 1))
+        return dfs(root, 0, 0)
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+# 
+
+# 
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+# 
+
+# 
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+#
+
+
+
